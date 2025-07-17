@@ -1,6 +1,7 @@
 import { UserRole } from '../User/user.interface';
 
 export interface IAuth {
+  [x: string]: unknown;
   email: string;
   password: string;
 }

@@ -28,6 +28,29 @@ const userLogin: RequestHandler = catchAsync(async (req, res) => {
 });
 
 
+const userLogout: RequestHandler = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    sendResponse(res, {
+      success: false,
+      message: 'No token provided',
+      statusCode: 400,
+      data: '',
+    });
+    return;
+  }
+
+  await AuthService.userLogoutFromDB(token);
+  res.clearCookie('token', { httpOnly: true, secure: true });
+  sendResponse(res, {
+    success: true,
+    message: 'Logout successful',
+    statusCode: 200,
+    data: '',
+  });
+});
+
 
 const changePassword: RequestHandler = catchAsync(async (req, res) => {
   const user = req.user;
@@ -83,4 +106,5 @@ export const AuthController = {
   userLogin,
   changePassword,
   refreshToken,
+  userLogout
 };

@@ -6,12 +6,12 @@ const createAcademicDepartmentValidationSchema = z.object({
       invalid_type_error: 'Academic department must be string',
       required_error: 'Name is required',
     }),
-    faculty: z.array(
-      z.string({
-        invalid_type_error: 'Academic faculty must be string',
-        required_error: 'Faculty ID is required',
-      })
-    ).nonempty({ message: 'At least one faculty ID is required' }),
+    // faculty: z.array(
+    //   z.string({
+    //     invalid_type_error: 'Academic faculty must be string',
+    //     required_error: 'Faculty ID is required',
+    //   })
+    // ).nonempty({ message: 'At least one faculty ID is required' }),
   }),
 });
 

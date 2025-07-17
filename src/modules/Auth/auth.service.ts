@@ -69,6 +69,9 @@ const loginUser = async (payload: IAuth) => {
   }
 };
 
+const userLogoutFromDB = async (token: string) => {
+  return true;
+};
 
 const refreshToken = async (token: string) => {
 
@@ -150,4 +153,5 @@ export const AuthService = {
   loginUser,
   refreshToken,
   changePassword,
+  userLogoutFromDB
 };
