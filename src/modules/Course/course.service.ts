@@ -7,15 +7,21 @@ const createCourseIntoDB = async (payload: TCourse) => {
 };
 
 const getAllCoursesFromDB = async () => {
-  const result = await Course.find().populate('academicFaculty');
+  const result = await Course.find()
+    .populate('faculty')
+    .populate('offered_in'); 
 
   return result;
 };
 
 const getSingleCourseFromDB = async (id: string) => {
-  const result = await Course.findById(id).populate('academicFaculty');
+  const result = await Course.findById(id)
+    .populate('faculty')
+    .populate('offered_in');
+
   return result;
 };
+
 
 const deleteCourseFromDB = async (id: string) => {
   const result = await Course.findByIdAndUpdate(
