@@ -14,6 +14,6 @@ export const createFacultyValidationSchema = z.object({
 
 
 
-export const studentValidations = {
+export const facultyValidations = {
   createFacultyValidationSchema,
 };
