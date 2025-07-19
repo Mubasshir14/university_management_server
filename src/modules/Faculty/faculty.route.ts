@@ -28,7 +28,7 @@ router.patch('/:id', auth(UserRole.ADMIN), FacultyControllers.updateFaculty);
 
 router.get(
   '/',
-  auth(UserRole.ADMIN, UserRole.STUDENT, UserRole.USER),
+  // auth(UserRole.ADMIN, UserRole.STUDENT, UserRole.USER),
   FacultyControllers.getAllFaculties,
 );
 

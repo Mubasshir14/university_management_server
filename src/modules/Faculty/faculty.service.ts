@@ -118,7 +118,7 @@ const getAllFacultiesFromDB = async () => {
 
 const getSingleFacultyFromDB = async (id: string) => {
   const result = await Faculty.findById(id).populate(
-    'academicDepartment academicFaculty',
+    'academicDepartment',
   );
 
   return result;
