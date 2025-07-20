@@ -84,21 +84,23 @@ const createStudentIntoDB = async (
 };
 
 const getNotApprovedStudent = async () => {
-  const notApprovedStudents = await Student.find({ isApproved: false });
+  const notApprovedStudents = await Student.find({
+    isApproved: false,
+  }).populate('academicDepartment academicSemester');
   return notApprovedStudents;
 };
 
 const getApprovedStudent = async () => {
-  const notApprovedStudents = await Student.find({ isApproved: true });
+  const notApprovedStudents = await Student.find({ isApproved: true }).populate(
+    'academicDepartment academicSemester',
+  );
   return notApprovedStudents;
 };
 
 const getMeAsStudentData = async (user: any) => {
   const student = await Student.findOne({
     user: new mongoose.Types.ObjectId(user.userId),
-  }).populate('academicDepartment academicSemester')
-;
-
+  }).populate('academicDepartment academicSemester');
   if (!student) {
     throw new AppError(httpStatus.NOT_FOUND, 'Student not found');
   }
@@ -106,8 +108,24 @@ const getMeAsStudentData = async (user: any) => {
   return student;
 };
 
+const makeApproval = async (id: string) => {
+  const student = await Student.findById(id);
+  if (!student) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Student not found');
+  }
+
+  const result = await Student.findByIdAndUpdate(
+    id,
+    { isApproved: true },
+    { new: true },
+  );
+
+  return result;
+};
+
 export const StudentService = {
   createStudentIntoDB,
+  makeApproval,
   getNotApprovedStudent,
   getApprovedStudent,
   getMeAsStudentData,

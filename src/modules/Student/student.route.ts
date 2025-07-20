@@ -12,9 +12,16 @@ router.post(
   auth(UserRole.USER),
   multerUpload.single('image'),
   parseBody,
-//   validateRequest(studentValidations.createStudentValidationSchema),
+  //   validateRequest(studentValidations.createStudentValidationSchema),
   StudentController.createStudent,
 );
+
+router.patch(
+  '/make-approval/:id',
+  auth(UserRole.ADMIN),
+  StudentController.makeApproval,
+);
+
 
 router.get(
   '/not-approved-student',
