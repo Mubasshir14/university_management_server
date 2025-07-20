@@ -20,7 +20,7 @@ router.post(
 
 router.get(
   '/:id',
-  auth(UserRole.ADMIN, UserRole.STUDENT, UserRole.USER),
+  // auth(UserRole.ADMIN, UserRole.STUDENT, UserRole.USER),
   FacultyControllers.getSingleFaculty,
 );
 

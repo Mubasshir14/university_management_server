@@ -22,7 +22,7 @@ router.post(
 
 router.get(
   '/:departmentId',
-  auth(UserRole.ADMIN),
+  // auth(UserRole.ADMIN),
   AcademicDepartmentControllers.getSingleAcademicDepartment,
 );
 
