@@ -60,10 +60,24 @@ const getApprovedRegisteredStudent = catchAsync(async (req, res) => {
   });
 });
 
+const makeRegistrationApproval = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await RegistrationService.makeRegistrationApproval(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Registration approved successfully',
+    data: result,
+  });
+});
+
 export const RegistrationController = {
   createRegistration,
   getMyRegistrationInformation,
   getStudentByCourse,
   getApprovedRegisteredStudent,
   getNotApprovedRegisteredStudent,
+  makeRegistrationApproval,
 };

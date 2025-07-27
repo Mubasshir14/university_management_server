@@ -139,10 +139,26 @@ const getApprovedRegisteredStudent = async () => {
   return notApprovedStudents;
 };
 
+const makeRegistrationApproval = async (id: string) => {
+  const registration = await Registration.findById(id);
+  if (!registration) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Registration not found');
+  }
+
+  const result = await Registration.findByIdAndUpdate(
+    id,
+    { isApproved: true },
+    { new: true },
+  );
+
+  return result;
+};
+
 export const RegistrationService = {
   createRegistration,
   getMyRegistrationInformation,
   getStudentByCourse,
   getNotApprovedRegisteredStudent,
   getApprovedRegisteredStudent,
+  makeRegistrationApproval,
 };

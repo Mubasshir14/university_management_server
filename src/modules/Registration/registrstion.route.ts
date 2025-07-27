@@ -23,6 +23,12 @@ router.post(
   RegistrationController.getStudentByCourse,
 );
 
+router.patch(
+  '/make-approval/:id',
+  auth(UserRole.ADMIN),
+  RegistrationController.makeRegistrationApproval,
+);
+
 router.get(
   '/not-approved-student',
   auth(UserRole.ADMIN),
