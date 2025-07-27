@@ -68,9 +68,35 @@ const getMeAsStudentData = catchAsync(async (req, res) => {
   });
 });
 
+const getStudentByDepartment = catchAsync(async (req, res) => {
+  const { id } = req.body;
+
+  const result = await StudentService.getStudentByDepartment(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student fetched accordint to department succesfully',
+    data: result,
+  });
+});
+
+const getStudentBySemester = catchAsync(async (req, res) => {
+  const { id } = req.body;
+  const result = await StudentService.getStudentBySemester(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student fetched accordint to semester succesfully',
+    data: result,
+  });
+});
+
 export const StudentController = {
   createStudent,
   makeApproval,
+  getStudentByDepartment,
+  getStudentBySemester,
   getNotApprovedStudent,
   getApprovedStudent,
   getMeAsStudentData,

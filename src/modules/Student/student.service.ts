@@ -108,6 +108,25 @@ const getMeAsStudentData = async (user: any) => {
   return student;
 };
 
+const getStudentByDepartment = async (id: string) => {
+  const students = await Student.find({
+    academicDepartment: id,
+    isApproved: true,
+  }).populate('academicDepartment academicSemester');
+
+  return students;
+};
+
+const getStudentBySemester = async (id: string) => {
+  const students = await Student.find({
+    academicSemester: id,
+    isApproved: true,
+  }).populate('academicDepartment academicSemester');
+
+  return students;
+};
+
+
 const makeApproval = async (id: string) => {
   const student = await Student.findById(id);
   if (!student) {
@@ -129,4 +148,6 @@ export const StudentService = {
   getNotApprovedStudent,
   getApprovedStudent,
   getMeAsStudentData,
+  getStudentByDepartment,
+  getStudentBySemester,
 };

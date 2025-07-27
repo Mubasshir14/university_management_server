@@ -22,7 +22,6 @@ router.patch(
   StudentController.makeApproval,
 );
 
-
 router.get(
   '/not-approved-student',
   auth(UserRole.ADMIN),
@@ -39,6 +38,18 @@ router.get(
   '/get-me-as-a-student',
   auth(UserRole.STUDENT, UserRole.ADMIN),
   StudentController.getMeAsStudentData,
+);
+
+router.post(
+  '/get-student-according-to-department',
+  auth(UserRole.ADMIN),
+  StudentController.getStudentByDepartment,
+);
+
+router.post(
+  '/get-student-according-to-semester',
+  auth(UserRole.ADMIN),
+  StudentController.getStudentBySemester,
 );
 
 export const StudentRoutes = router;
