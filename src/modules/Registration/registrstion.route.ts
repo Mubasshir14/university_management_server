@@ -23,4 +23,16 @@ router.post(
   RegistrationController.getStudentByCourse,
 );
 
+router.get(
+  '/not-approved-student',
+  auth(UserRole.ADMIN),
+  RegistrationController.getNotApprovedRegisteredStudent,
+);
+
+router.get(
+  '/approved-student',
+  auth(UserRole.ADMIN),
+  RegistrationController.getApprovedRegisteredStudent,
+);
+
 export const RegistrationRoutes = router;

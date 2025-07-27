@@ -38,8 +38,32 @@ const getStudentByCourse = catchAsync(async (req, res) => {
   });
 });
 
+const getNotApprovedRegisteredStudent = catchAsync(async (req, res) => {
+  const result = await RegistrationService.getNotApprovedRegisteredStudent();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student fetched succesfully',
+    data: result,
+  });
+});
+
+const getApprovedRegisteredStudent = catchAsync(async (req, res) => {
+  const result = await RegistrationService.getApprovedRegisteredStudent();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student fetched succesfully',
+    data: result,
+  });
+});
+
 export const RegistrationController = {
   createRegistration,
   getMyRegistrationInformation,
   getStudentByCourse,
+  getApprovedRegisteredStudent,
+  getNotApprovedRegisteredStudent,
 };

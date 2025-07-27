@@ -23,6 +23,25 @@ router.patch(
 );
 
 router.get(
+  '/',
+  auth(UserRole.ADMIN),
+  StudentController.getAllStudent,
+);
+
+router.get(
+  '/db',
+  auth(UserRole.ADMIN),
+  StudentController.dashboradDepBasedStudent,
+);
+
+router.get(
+  '/sem',
+  auth(UserRole.ADMIN),
+  StudentController.dashboradSemBasedStudent,
+);
+
+
+router.get(
   '/not-approved-student',
   auth(UserRole.ADMIN),
   StudentController.getNotApprovedStudent,

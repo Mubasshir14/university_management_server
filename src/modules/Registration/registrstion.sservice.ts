@@ -125,8 +125,24 @@ const getStudentByCourse = async (id: string) => {
   return result;
 };
 
+const getNotApprovedRegisteredStudent = async () => {
+  const notApprovedStudents = await Registration.find({
+    isApproved: false,
+  }).populate('student courses academicDepartment academicSemester');
+  return notApprovedStudents;
+};
+
+const getApprovedRegisteredStudent = async () => {
+  const notApprovedStudents = await Registration.find({
+    isApproved: true,
+  }).populate('student courses academicDepartment academicSemester');
+  return notApprovedStudents;
+};
+
 export const RegistrationService = {
   createRegistration,
   getMyRegistrationInformation,
   getStudentByCourse,
+  getNotApprovedRegisteredStudent,
+  getApprovedRegisteredStudent,
 };

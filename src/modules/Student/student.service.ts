@@ -83,6 +83,13 @@ const createStudentIntoDB = async (
   }
 };
 
+const getAllStudent = async () => {
+  const result = await Student.find({}).populate(
+    'academicDepartment academicSemester',
+  );
+  return result;
+};
+
 const getNotApprovedStudent = async () => {
   const notApprovedStudents = await Student.find({
     isApproved: false,
@@ -126,7 +133,6 @@ const getStudentBySemester = async (id: string) => {
   return students;
 };
 
-
 const makeApproval = async (id: string) => {
   const student = await Student.findById(id);
   if (!student) {
@@ -142,12 +148,76 @@ const makeApproval = async (id: string) => {
   return result;
 };
 
+const dashboradDepBasedStudent = async () => {
+  const result = await Student.aggregate([
+    {
+      $group: {
+        _id: '$academicDepartment',
+        totalStudents: { $sum: 1 },
+      },
+    },
+    {
+      $lookup: {
+        from: 'academicdepartments',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'departmentInfo',
+      },
+    },
+    { $unwind: '$departmentInfo' },
+    {
+      $project: {
+        _id: 0,
+        departmentId: '$_id',
+        departmentName: '$departmentInfo.name',
+        shortName: '$departmentInfo.shortName',
+        totalStudents: 1,
+      },
+    },
+  ]);
+  return result;
+};
+
+const dashboradSemBasedStudent = async () => {
+  const result = await Student.aggregate([
+    {
+      $group: {
+        _id: '$academicSemester',
+        totalStudents: { $sum: 1 },
+      },
+    },
+    {
+      $lookup: {
+        from: 'academicsemesters',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'semesterInfo',
+      },
+    },
+    { $unwind: '$semesterInfo' },
+    {
+      $project: {
+        _id: 0,
+        semesterId: '$_id',
+        semesterName: '$semesterInfo.name',
+        year: '$semesterInfo.year',
+        code: '$semesterInfo.code',
+        totalStudents: 1,
+      },
+    },
+  ]);
+  return result;
+};
+
 export const StudentService = {
   createStudentIntoDB,
   makeApproval,
+  getAllStudent,
   getNotApprovedStudent,
   getApprovedStudent,
   getMeAsStudentData,
   getStudentByDepartment,
   getStudentBySemester,
+  dashboradDepBasedStudent,
+  dashboradSemBasedStudent,
 };

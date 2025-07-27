@@ -3,6 +3,7 @@ import sendResponse from '../../app/utils/sendResponse';
 import httpStatus from 'http-status';
 import { StudentService } from './student.service';
 
+
 const createStudent = catchAsync(async (req, res) => {
   const studentData = req.body;
   const image = req.file;
@@ -31,6 +32,17 @@ const makeApproval = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Student approved successfully',
+    data: result,
+  });
+});
+
+const getAllStudent = catchAsync(async (req, res) => {
+  const result = await StudentService.getAllStudent();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student fetched succesfully',
     data: result,
   });
 });
@@ -92,12 +104,37 @@ const getStudentBySemester = catchAsync(async (req, res) => {
   });
 });
 
+
+const dashboradDepBasedStudent = catchAsync(async (req, res) => {
+  const result = await StudentService.dashboradDepBasedStudent();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student fetched accordint to dashboard dept succesfully',
+    data: result,
+  });
+});
+
+const dashboradSemBasedStudent = catchAsync(async (req, res) => {
+  const result = await StudentService.dashboradSemBasedStudent();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student fetched accordint to dashboard sem succesfully',
+    data: result,
+  });
+});
+
+
 export const StudentController = {
   createStudent,
   makeApproval,
+  getAllStudent,
   getStudentByDepartment,
   getStudentBySemester,
   getNotApprovedStudent,
   getApprovedStudent,
   getMeAsStudentData,
+  dashboradDepBasedStudent,
+  dashboradSemBasedStudent,
 };
