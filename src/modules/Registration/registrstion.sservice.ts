@@ -116,6 +116,14 @@ const getMyRegistrationInformation = async (id: string) => {
   return result;
 };
 
+const getSingleRegistration = async (id: string) => {
+  const result = await Registration.findOne({ _id: id }).populate(
+    'courses student',
+  );
+  // academicDepartment academicSemester student 
+  return result;
+};
+
 const getStudentByCourse = async (id: string) => {
   const result = await Registration.find({
     courses: { $in: [id] },
@@ -158,7 +166,7 @@ const updateAndDropCourseByStudent = async (
   studentId: string,
   academicSemesterId: string,
   academicDepartmentId: string,
-  courseIdsToDrop: string[]
+  courseIdsToDrop: string[],
 ) => {
   const session = await mongoose.startSession();
 
@@ -166,7 +174,7 @@ const updateAndDropCourseByStudent = async (
     session.startTransaction();
 
     const courseObjectIds = courseIdsToDrop.map(
-      (courseId) => new mongoose.Types.ObjectId(courseId)
+      (courseId) => new mongoose.Types.ObjectId(courseId),
     );
 
     const registration = await Registration.findOne({
@@ -179,7 +187,7 @@ const updateAndDropCourseByStudent = async (
     if (!registration) {
       throw new AppError(
         httpStatus.NOT_FOUND,
-        'Registration not found or already approved'
+        'Registration not found or already approved',
       );
     }
 
@@ -208,31 +216,127 @@ const updateAndDropCourseByStudent = async (
         $pull: { courses: { $in: courseObjectIds } },
         $inc: { totalCredit: -creditsToDrop },
       },
-      { session }
+      { session },
     );
 
     if (!updatedRegistration.modifiedCount) {
       throw new AppError(
         httpStatus.BAD_REQUEST,
-        'Failed to update registration or registration already approved'
+        'Failed to update registration or registration already approved',
       );
     }
 
-
-    const updatedReg = await Registration.findById(registration._id).session(session);
+    const updatedReg = await Registration.findById(registration._id).session(
+      session,
+    );
 
     if (!updatedReg) {
-      throw new AppError(httpStatus.NOT_FOUND, 'Updated registration not found');
-    }
-
-if (updatedReg.totalCredit < 9 || updatedReg.totalCredit > 15) {
       throw new AppError(
-        httpStatus.BAD_REQUEST,
-        `Remaining credit (${updatedReg.totalCredit}) must be between 9 and 15`
+        httpStatus.NOT_FOUND,
+        'Updated registration not found',
       );
     }
 
-   
+    if (updatedReg.totalCredit < 9 || updatedReg.totalCredit > 15) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        `Remaining credit (${updatedReg.totalCredit}) must be between 9 and 15`,
+      );
+    }
+
+    await session.commitTransaction();
+    return updatedReg;
+  } catch (error) {
+    console.log(error);
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
+  }
+};
+
+const updateAndDropCourseByAdmin = async (
+  id: string,
+  academicSemesterId: string,
+  academicDepartmentId: string,
+  courseIdsToDrop: string[],
+) => {
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const courseObjectIds = courseIdsToDrop.map(
+      (courseId) => new mongoose.Types.ObjectId(courseId),
+    );
+
+    const registration = await Registration.findOne({
+      _id: id,
+      academicSemester: academicSemesterId,
+      academicDepartment: academicDepartmentId,
+      isApproved: false,
+    }).session(session);
+
+    if (!registration) {
+      throw new AppError(
+        httpStatus.NOT_FOUND,
+        'Registration not found or already approved',
+      );
+    }
+
+    const courseCreditAggregation = await Course.aggregate([
+      {
+        $match: {
+          _id: { $in: courseObjectIds },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalCredit: { $sum: '$credits' },
+        },
+      },
+    ]);
+
+    const creditsToDrop = courseCreditAggregation[0]?.totalCredit || 0;
+
+    const updatedRegistration = await Registration.updateOne(
+      {
+        _id: registration._id,
+        isApproved: false,
+      },
+      {
+        $pull: { courses: { $in: courseObjectIds } },
+        $inc: { totalCredit: -creditsToDrop },
+      },
+      { session },
+    );
+
+    if (!updatedRegistration.modifiedCount) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        'Failed to update registration or registration already approved',
+      );
+    }
+
+    const updatedReg = await Registration.findById(registration._id).session(
+      session,
+    );
+
+    if (!updatedReg) {
+      throw new AppError(
+        httpStatus.NOT_FOUND,
+        'Updated registration not found',
+      );
+    }
+
+    if (updatedReg.totalCredit < 9 || updatedReg.totalCredit > 15) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        `Remaining credit (${updatedReg.totalCredit}) must be between 9 and 15`,
+      );
+    }
+
     await session.commitTransaction();
     return updatedReg;
   } catch (error) {
@@ -251,5 +355,7 @@ export const RegistrationService = {
   getNotApprovedRegisteredStudent,
   getApprovedRegisteredStudent,
   makeRegistrationApproval,
-  updateAndDropCourseByStudent
+  updateAndDropCourseByStudent,
+  updateAndDropCourseByAdmin,
+  getSingleRegistration,
 };

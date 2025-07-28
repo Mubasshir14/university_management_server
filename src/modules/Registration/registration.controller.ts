@@ -25,6 +25,17 @@ const getMyRegistrationInformation = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleRegistration = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await RegistrationService.getSingleRegistration(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Registration info got succesfully',
+    data: result,
+  });
+});
+
 const getStudentByCourse = catchAsync(async (req, res) => {
   const { id } = req.body;
 
@@ -97,6 +108,26 @@ const updateAndDropCourseByStudent = catchAsync(async (req, res) => {
   });
 });
 
+const updateAndDropCourseByAdmin = catchAsync(async (req, res) => {
+  const { academicSemesterId, academicDepartmentId, courseIdsToDrop } =
+    req.body;
+  const { id } = req.params;
+  const updatedRegistration =
+    await RegistrationService.updateAndDropCourseByStudent(
+      id,
+      academicSemesterId,
+      academicDepartmentId,
+      courseIdsToDrop,
+    );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Courses dropped and registration updated successfully!',
+    data: updatedRegistration,
+  });
+});
+
 export const RegistrationController = {
   createRegistration,
   getMyRegistrationInformation,
@@ -105,4 +136,6 @@ export const RegistrationController = {
   getNotApprovedRegisteredStudent,
   makeRegistrationApproval,
   updateAndDropCourseByStudent,
+  updateAndDropCourseByAdmin,
+  getSingleRegistration,
 };
