@@ -118,9 +118,9 @@ const getMyRegistrationInformation = async (id: string) => {
 
 const getSingleRegistration = async (id: string) => {
   const result = await Registration.findOne({ _id: id }).populate(
-    'courses student',
+    'courses student academicDepartment academicSemester',
   );
-  // academicDepartment academicSemester student 
+  // academicDepartment academicSemester student
   return result;
 };
 
@@ -256,7 +256,7 @@ const updateAndDropCourseByStudent = async (
 };
 
 const updateAndDropCourseByAdmin = async (
-  id: string,
+  studentId: string,
   academicSemesterId: string,
   academicDepartmentId: string,
   courseIdsToDrop: string[],
@@ -271,7 +271,7 @@ const updateAndDropCourseByAdmin = async (
     );
 
     const registration = await Registration.findOne({
-      _id: id,
+       student: studentId,
       academicSemester: academicSemesterId,
       academicDepartment: academicDepartmentId,
       isApproved: false,

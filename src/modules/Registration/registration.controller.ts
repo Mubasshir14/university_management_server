@@ -109,17 +109,17 @@ const updateAndDropCourseByStudent = catchAsync(async (req, res) => {
 });
 
 const updateAndDropCourseByAdmin = catchAsync(async (req, res) => {
-  const { academicSemesterId, academicDepartmentId, courseIdsToDrop } =
+  const { studentId, academicSemesterId, academicDepartmentId, courseIdsToDrop } =
     req.body;
-  const { id } = req.params;
+
   const updatedRegistration =
     await RegistrationService.updateAndDropCourseByStudent(
-      id,
+      studentId,
       academicSemesterId,
       academicDepartmentId,
       courseIdsToDrop,
     );
-
+  console.log(updatedRegistration);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

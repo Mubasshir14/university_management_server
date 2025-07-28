@@ -54,7 +54,7 @@ router.patch(
 );
 
 router.patch(
-  '/drop-and-update-course-by-admin/:id',
+  '/drop-and-update-course-by-admin',
   auth(UserRole.ADMIN),
   RegistrationController.updateAndDropCourseByAdmin,
 );
