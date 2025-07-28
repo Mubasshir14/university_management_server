@@ -30,13 +30,13 @@ router.patch(
 );
 
 router.get(
-  '/not-approved-student',
+  '/not-approved-registration',
   auth(UserRole.ADMIN),
   RegistrationController.getNotApprovedRegisteredStudent,
 );
 
 router.get(
-  '/approved-student',
+  '/approved-registration',
   auth(UserRole.ADMIN),
   RegistrationController.getApprovedRegisteredStudent,
 );
