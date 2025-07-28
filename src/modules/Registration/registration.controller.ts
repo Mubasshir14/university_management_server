@@ -73,6 +73,30 @@ const makeRegistrationApproval = catchAsync(async (req, res) => {
   });
 });
 
+const updateAndDropCourseByStudent = catchAsync(async (req, res) => {
+  const {
+    studentId,
+    academicSemesterId,
+    academicDepartmentId,
+    courseIdsToDrop,
+  } = req.body;
+
+  const updatedRegistration =
+    await RegistrationService.updateAndDropCourseByStudent(
+      studentId,
+      academicSemesterId,
+      academicDepartmentId,
+      courseIdsToDrop,
+    );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Courses dropped and registration updated successfully!',
+    data: updatedRegistration,
+  });
+});
+
 export const RegistrationController = {
   createRegistration,
   getMyRegistrationInformation,
@@ -80,4 +104,5 @@ export const RegistrationController = {
   getApprovedRegisteredStudent,
   getNotApprovedRegisteredStudent,
   makeRegistrationApproval,
+  updateAndDropCourseByStudent,
 };

@@ -41,4 +41,10 @@ router.get(
   RegistrationController.getApprovedRegisteredStudent,
 );
 
+router.patch(
+  '/drop-and-update-course-by-student',
+  auth(UserRole.STUDENT),
+  RegistrationController.updateAndDropCourseByStudent,
+);
+
 export const RegistrationRoutes = router;
