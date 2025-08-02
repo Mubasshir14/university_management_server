@@ -161,96 +161,106 @@ Make sure you have the following installed:
 
 ## Folder Structure
 ```
-university_management_server/
-├── src/
-│   ├── app/
-│   │   ├── config/
-│   │   │   └── index.ts
-│   │   ├── errors/
-│   │   │   ├── AppError.ts
-│   │   │   ├── handleZodError.ts
-│   │   │   └── handleCastError.ts
-│   │   ├── interface/
-│   │   │   ├── events.ts
-│   │   │   └── index.d.ts
-│   │   ├── middlewares/
-│   │   │   ├── auth.ts
-│   │   │   └── globalErrorHandler.ts
-│   │   ├── route/
-│   │   │   └── index.ts
-│   │   ├── utils/
-│   │   │   ├── CatchAsync.ts
-│   │   │   └── sendResponse.ts
-│   ├── module/
-│   │   ├── Auth/
-│   │   │   ├── controller.ts
-│   │   │   ├── interface.ts
-│   │   │   ├── model.ts
-│   │   │   ├── route.ts
-│   │   │   ├── validation.ts
-│   │   │   └── service.ts
-│   │   ├── AcademicDepartment/
-│   │   │   ├── controller.ts
-│   │   │   ├── interface.ts
-│   │   │   ├── model.ts
-│   │   │   ├── route.ts
-│   │   │   ├── validation.ts
-│   │   │   └── service.ts
-│   │   ├── AcademicSemester/
-│   │   │   ├── controller.ts
-│   │   │   ├── interface.ts
-│   │   │   ├── model.ts
-│   │   │   ├── route.ts
-│   │   │   ├── validation.ts
-│   │   │   └── service.ts
-│   │   ├── Course/
-│   │   │   ├── controller.ts
-│   │   │   ├── interface.ts
-│   │   │   ├── model.ts
-│   │   │   ├── route.ts
-│   │   │   ├── validation.ts
-│   │   │   └── service.ts
-│   │   ├── Faculty/
-│   │   │   ├── controller.ts
-│   │   │   ├── interface.ts
-│   │   │   ├── model.ts
-│   │   │   ├── route.ts
-│   │   │   ├── validation.ts
-│   │   │   └── service.ts
-│   │   ├── Registration/
-│   │   │   ├── controller.ts
-│   │   │   ├── interface.ts
-│   │   │   ├── model.ts
-│   │   │   ├── route.ts
-│   │   │   ├── validation.ts
-│   │   │   └── service.ts
-│   │   ├── Student/
-│   │   │   ├── controller.ts
-│   │   │   ├── interface.ts
-│   │   │   ├── model.ts
-│   │   │   ├── route.ts
-│   │   │   ├── validation.ts
-│   │   │   └── service.ts
-│   │   ├── User/
-│   │   │   ├── controller.ts
-│   │   │   ├── interface.ts
-│   │   │   ├── model.ts
-│   │   │   ├── route.ts
-│   │   │   ├── validation.ts
-│   │   │   └── service.ts
-│   ├── app.ts
-│   ├── server.ts
-│   ├── Uploads
-├── dist/                   # Compiled JavaScript files
-├── .env                    # Environment variables
-├── .eslintrc.config.mjs            # ESLint configuration
-├── .prettierrc             # Prettier configuration
-├── package.json            # Project dependencies and scripts
-├── tsconfig.json           # TypeScript configuration
-└── README.md               # Project documentation
-```
-
-
+📦src
+ ┣ 📂app
+ ┃ ┣ 📂builder
+ ┃ ┃ ┗ 📜QueryBuilder.ts
+ ┃ ┣ 📂config
+ ┃ ┃ ┗ 📜index.ts
+ ┃ ┣ 📂errors
+ ┃ ┃ ┣ 📜AppError.ts
+ ┃ ┃ ┣ 📜handleCastError.ts
+ ┃ ┃ ┣ 📜handleDuplicateError.ts
+ ┃ ┃ ┣ 📜handleValidationError.ts
+ ┃ ┃ ┗ 📜handleZodError.ts
+ ┃ ┣ 📂interface
+ ┃ ┃ ┣ 📜error.ts
+ ┃ ┃ ┣ 📜index.d.ts
+ ┃ ┃ ┗ 📜user.ts
+ ┃ ┣ 📂middlewares
+ ┃ ┃ ┣ 📜auth.ts
+ ┃ ┃ ┣ 📜bodyParse.ts
+ ┃ ┃ ┣ 📜clientInfoParser.ts
+ ┃ ┃ ┣ 📜globalErrorhandler.ts
+ ┃ ┃ ┣ 📜notFound.ts
+ ┃ ┃ ┗ 📜validateRequest.ts
+ ┃ ┣ 📂routes
+ ┃ ┃ ┗ 📜index.ts
+ ┃ ┣ 📂types
+ ┃ ┃ ┗ 📜express.d.ts
+ ┃ ┗ 📂utils
+ ┃ ┃ ┣ 📜catchAsync.ts
+ ┃ ┃ ┣ 📜cloudinary.config.ts
+ ┃ ┃ ┣ 📜multer.config.ts
+ ┃ ┃ ┣ 📜sendEmails.ts
+ ┃ ┃ ┗ 📜sendResponse.ts
+ ┣ 📂modules
+ ┃ ┣ 📂AcademicDepartment
+ ┃ ┃ ┣ 📜academicDepartment.controller.ts
+ ┃ ┃ ┣ 📜academicDepartment.interface.ts
+ ┃ ┃ ┣ 📜academicDepartment.model.ts
+ ┃ ┃ ┣ 📜academicDepartment.route.ts
+ ┃ ┃ ┣ 📜academicDepartment.service.ts
+ ┃ ┃ ┣ 📜academicDepartment.validation.ts
+ ┃ ┃ ┗ 📜academicDepartmets.constant.ts
+ ┃ ┣ 📂AcademicSemester
+ ┃ ┃ ┣ 📜academicSemester.constant.ts
+ ┃ ┃ ┣ 📜academicSemester.controller.ts
+ ┃ ┃ ┣ 📜academicSemester.interface.ts
+ ┃ ┃ ┣ 📜academicSemester.model.ts
+ ┃ ┃ ┣ 📜academicSemester.route.ts
+ ┃ ┃ ┣ 📜academicSemester.service.ts
+ ┃ ┃ ┗ 📜academicSemester.validation.ts
+ ┃ ┣ 📂Auth
+ ┃ ┃ ┣ 📜auth.controller.ts
+ ┃ ┃ ┣ 📜auth.interface.ts
+ ┃ ┃ ┣ 📜auth.route.ts
+ ┃ ┃ ┣ 📜auth.service.ts
+ ┃ ┃ ┣ 📜auth.utils.ts
+ ┃ ┃ ┗ 📜auth.validation.ts
+ ┃ ┣ 📂Course
+ ┃ ┃ ┣ 📜course.constant.ts
+ ┃ ┃ ┣ 📜course.controller.ts
+ ┃ ┃ ┣ 📜course.interface.ts
+ ┃ ┃ ┣ 📜course.model.ts
+ ┃ ┃ ┣ 📜course.route.ts
+ ┃ ┃ ┣ 📜course.service.ts
+ ┃ ┃ ┗ 📜course.validation.ts
+ ┃ ┣ 📂Faculty
+ ┃ ┃ ┣ 📜faculty.constant.ts
+ ┃ ┃ ┣ 📜faculty.controller.ts
+ ┃ ┃ ┣ 📜faculty.interface.ts
+ ┃ ┃ ┣ 📜faculty.model.ts
+ ┃ ┃ ┣ 📜faculty.route.ts
+ ┃ ┃ ┣ 📜faculty.service.ts
+ ┃ ┃ ┣ 📜faculty.validation.ts
+ ┃ ┃ ┗ 📜generateFacultyId.ts
+ ┃ ┣ 📂Registration
+ ┃ ┃ ┣ 📜registration.controller.ts
+ ┃ ┃ ┣ 📜registration.interface.ts
+ ┃ ┃ ┣ 📜registration.model.ts
+ ┃ ┃ ┣ 📜registrstion.route.ts
+ ┃ ┃ ┗ 📜registrstion.sservice.ts
+ ┃ ┣ 📂Student
+ ┃ ┃ ┣ 📜generateStudentId.ts
+ ┃ ┃ ┣ 📜student.constant.ts
+ ┃ ┃ ┣ 📜student.controller.ts
+ ┃ ┃ ┣ 📜student.interface.ts
+ ┃ ┃ ┣ 📜student.model.ts
+ ┃ ┃ ┣ 📜student.route.ts
+ ┃ ┃ ┣ 📜student.service.ts
+ ┃ ┃ ┗ 📜student.validation.ts
+ ┃ ┗ 📂User
+ ┃ ┃ ┣ 📜user.constant.ts
+ ┃ ┃ ┣ 📜user.controller.ts
+ ┃ ┃ ┣ 📜user.interface.ts
+ ┃ ┃ ┣ 📜user.model.ts
+ ┃ ┃ ┣ 📜user.route.ts
+ ┃ ┃ ┣ 📜user.service.ts
+ ┃ ┃ ┗ 📜user.validation.ts
+ ┣ 📜app.ts
+ ┗ 📜server.ts
+ ```
 
 ## Contributing
 Contributions are welcome! Please follow these steps:
