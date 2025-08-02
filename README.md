@@ -83,10 +83,10 @@ Make sure you have the following installed:
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Mubasshir14/university_management_server.git
    ```
    ```bash
-   cd <repository-folder>
+   cd university_management_server
    ```
 
 2. **Install dependencies:**
@@ -159,8 +159,14 @@ Make sure you have the following installed:
   npm run prettier:fix
   ```
 
+- **Deploy To Vercel:**
+  ```bash
+  vercel --prod
+  ```
+
 ## Folder Structure
 ```
+university_management_server/
 📦src
  ┣ 📂app
  ┃ ┣ 📂builder
