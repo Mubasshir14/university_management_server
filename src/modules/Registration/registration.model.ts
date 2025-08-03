@@ -35,6 +35,10 @@ const registrationSchema = new Schema<TRegistration, RegistrationModel>(
       type: Boolean,
       default: false,
     },
+    isResultPublished: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     toJSON: {
