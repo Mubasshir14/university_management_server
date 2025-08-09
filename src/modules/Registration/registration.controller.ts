@@ -119,7 +119,6 @@ const updateAndDropCourseByAdmin = catchAsync(async (req, res) => {
       academicDepartmentId,
       courseIdsToDrop,
     );
-  console.log(updatedRegistration);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
