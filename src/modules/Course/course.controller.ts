@@ -25,6 +25,18 @@ const getAllCourses = catchAsync(async (req, res) => {
   });
 });
 
+const getAllCoursesAccordingToStudentAcademicSemester = catchAsync(async (req, res) => {
+  const {id} = req.params;
+  const result = await CourseServices.getAllCoursesAccordingToStudentAcademicSemester(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Courses are retrieved successfully',
+    data: result,
+  });
+});
+
 const getSingleCourse = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await CourseServices.getSingleCourseFromDB(id);
@@ -54,6 +66,7 @@ const deleteCourse = catchAsync(async (req, res) => {
 export const CourseControllers = {
   createCourse,
   getSingleCourse,
+  getAllCoursesAccordingToStudentAcademicSemester,
   getAllCourses,
   deleteCourse,
 };

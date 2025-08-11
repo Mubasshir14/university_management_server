@@ -18,6 +18,12 @@ router.get('/:id', CourseControllers.getSingleCourse);
 
 router.delete('/:id', auth(UserRole.ADMIN), CourseControllers.deleteCourse);
 
+router.get(
+  '/student/:id',
+  auth(UserRole.STUDENT),
+  CourseControllers.getAllCoursesAccordingToStudentAcademicSemester,
+);
+
 router.get('/', CourseControllers.getAllCourses);
 
 export const CourseRoutes = router;
