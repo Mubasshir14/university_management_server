@@ -18,7 +18,7 @@ const getAllCoursesAccordingToStudentAcademicSemester = async (id: string) => {
   if (!student) {
     throw new AppError(500, 'Student is not found');
   }
-  
+
   const result = await Course.find({
     offered_in: student.academicSemester,
   })
@@ -37,13 +37,7 @@ const getSingleCourseFromDB = async (id: string) => {
 };
 
 const deleteCourseFromDB = async (id: string) => {
-  const result = await Course.findByIdAndUpdate(
-    id,
-    { isDeleted: true },
-    {
-      new: true,
-    },
-  );
+  const result = await Course.deleteOne({_id:id});
   return result;
 };
 
