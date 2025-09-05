@@ -20,21 +20,44 @@ const getAllAcademicDepartmentsFromDB = async () => {
 };
 
 const getSingleAcademicDepartmentFromDB = async (id: string) => {
-  const result =
-    await AcademicDepartment.findById(id).populate('faculty');
+  const result = await AcademicDepartment.findById(id).populate('faculty');
 
   return result;
 };
 
+// const updateAcademicDepartmentIntoDB = async (
+//   id: string,
+//   payload: Partial<TAcademicDepartment>,
+// ) => {
+//   const result = await AcademicDepartment.findOneAndUpdate(
+//     { _id: id },
+//     payload,
+//     {
+//       new: true,
+//     },
+//   );
+//   return result;
+// };
+
 const updateAcademicDepartmentIntoDB = async (
-  id: string,
+  departmentId: string,
   payload: Partial<TAcademicDepartment>,
+  image?: any,
 ) => {
+  const updateData: Partial<TAcademicDepartment> = {
+    ...payload,
+  };
+
+  if (image) {
+    updateData.image = image?.path;
+  }
+
   const result = await AcademicDepartment.findOneAndUpdate(
-    { _id: id },
-    payload,
+    { _id: departmentId },
+    updateData,
     {
       new: true,
+      runValidators: true,
     },
   );
   return result;
@@ -42,7 +65,7 @@ const updateAcademicDepartmentIntoDB = async (
 
 export const AcademicDepartmentServices = {
   createAcademicDepartmentIntoDB,
+    updateAcademicDepartmentIntoDB,
   getAllAcademicDepartmentsFromDB,
-  getSingleAcademicDepartmentFromDB,
-  updateAcademicDepartmentIntoDB,
+  getSingleAcademicDepartmentFromDB
 };

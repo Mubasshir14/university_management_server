@@ -4,9 +4,11 @@ import catchAsync from '../../app/utils/catchAsync';
 import sendResponse from '../../app/utils/sendResponse';
 
 const createAcademicDepartmemt = catchAsync(async (req, res) => {
-
   const result =
-    await AcademicDepartmentServices.createAcademicDepartmentIntoDB(req.body,  req.file,);
+    await AcademicDepartmentServices.createAcademicDepartmentIntoDB(
+      req.body,
+      req.file,
+    );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -42,14 +44,14 @@ const getSingleAcademicDepartment = catchAsync(async (req, res) => {
   });
 });
 
-const updateAcademicDeartment = catchAsync(async (req, res) => {
+const updateAcademicDepartment = catchAsync(async (req, res) => {
   const { departmentId } = req.params;
   const result =
     await AcademicDepartmentServices.updateAcademicDepartmentIntoDB(
       departmentId,
       req.body,
+      req?.file,
     );
-
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -60,7 +62,7 @@ const updateAcademicDeartment = catchAsync(async (req, res) => {
 
 export const AcademicDepartmentControllers = {
   createAcademicDepartmemt,
+  updateAcademicDepartment,
   getAllAcademicDepartments,
   getSingleAcademicDepartment,
-  updateAcademicDeartment,
 };

@@ -12,7 +12,7 @@ const router = express.Router();
 router.post(
   '/create-academic-department',
   auth(UserRole.ADMIN),
-   multerUpload.single('image'),
+  multerUpload.single('image'),
   parseBody,
   validateRequest(
     AcademicDepartmentValidation.createAcademicDepartmentValidationSchema,
@@ -20,19 +20,17 @@ router.post(
   AcademicDepartmentControllers.createAcademicDepartmemt,
 );
 
+router.patch(
+  '/update-department/:departmentId',
+  auth(UserRole.ADMIN),
+  multerUpload.single('image'),
+  AcademicDepartmentControllers.updateAcademicDepartment,
+);
+
 router.get(
   '/:departmentId',
   // auth(UserRole.ADMIN),
   AcademicDepartmentControllers.getSingleAcademicDepartment,
-);
-
-router.patch(
-  '/:departmentId',
-  auth(UserRole.ADMIN),
-  validateRequest(
-    AcademicDepartmentValidation.updateAcademicDepartmentValidationSchema,
-  ),
-  AcademicDepartmentControllers.updateAcademicDeartment,
 );
 
 router.get(
