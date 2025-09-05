@@ -32,14 +32,29 @@ const getSingleCourseFromDB = async (id: string) => {
   const result = await Course.findById(id)
     .populate('faculty')
     .populate('offered_in');
-
   return result;
 };
 
 const deleteCourseFromDB = async (id: string) => {
-  const result = await Course.deleteOne({_id:id});
+  const result = await Course.deleteOne({ _id: id });
   return result;
 };
+
+const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
+  const course = await Course.findById(id);
+  if (!course) {
+    throw new AppError(400, "Course not found");
+  }
+
+  const updatedCourse = await Course.findOneAndUpdate(
+    { _id: id },
+    { ...payload },
+    { new: true, runValidators: true } 
+  );
+
+  return updatedCourse;
+};
+
 
 export const CourseServices = {
   createCourseIntoDB,
@@ -47,4 +62,5 @@ export const CourseServices = {
   getAllCoursesAccordingToStudentAcademicSemester,
   getSingleCourseFromDB,
   deleteCourseFromDB,
+  updateCourseIntoDB,
 };

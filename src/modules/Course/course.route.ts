@@ -24,6 +24,12 @@ router.get(
   CourseControllers.getAllCoursesAccordingToStudentAcademicSemester,
 );
 
+router.patch(
+  '/update-course/:id',
+  auth(UserRole.ADMIN),
+  CourseControllers.updateCourse,
+);
+
 router.get('/', CourseControllers.getAllCourses);
 
 export const CourseRoutes = router;
