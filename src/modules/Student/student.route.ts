@@ -71,4 +71,10 @@ router.post(
   StudentController.getStudentBySemester,
 );
 
+router.delete(
+  '/delete-student/:id',
+  auth(UserRole.ADMIN),
+  StudentController.deleteStudent,
+);
+
 export const StudentRoutes = router;

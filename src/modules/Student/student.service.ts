@@ -8,6 +8,7 @@ import { generateStudentId } from './generateStudentId';
 import { AcademicSemester } from '../AcademicSemester/academicSemester.model';
 import { Student } from './student.model';
 import User from '../User/user.model';
+import { Registration } from '../Registration/registration.model';
 
 const createStudentIntoDB = async (
   payload: TStudent,
@@ -209,6 +210,33 @@ const dashboradSemBasedStudent = async () => {
   return result;
 };
 
+const deleteStudent = async (id: string) => {
+  const session = await mongoose.startSession();
+
+  try {
+    const result = await session.withTransaction(async () => {
+      const student = await Student.findById(id).session(session);
+      if (!student) {
+        throw new AppError(400, 'Student Not Found');
+      }
+      await Registration.findOneAndDelete({ student: id }).session(session);
+
+      await User.findByIdAndDelete(id).session(session);
+      const res = await Student.findByIdAndDelete(id).session(session);
+
+      return res;
+    });
+
+    return result;
+  } catch (error: any) {
+    throw error instanceof AppError
+      ? error
+      : new AppError(500, 'Failed to delete student');
+  } finally {
+    session.endSession();
+  }
+};
+
 export const StudentService = {
   createStudentIntoDB,
   makeApproval,
@@ -220,4 +248,5 @@ export const StudentService = {
   getStudentBySemester,
   dashboradDepBasedStudent,
   dashboradSemBasedStudent,
+  deleteStudent,
 };

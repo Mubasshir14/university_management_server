@@ -3,7 +3,6 @@ import sendResponse from '../../app/utils/sendResponse';
 import httpStatus from 'http-status';
 import { StudentService } from './student.service';
 
-
 const createStudent = catchAsync(async (req, res) => {
   const studentData = req.body;
   const image = req.file;
@@ -104,7 +103,6 @@ const getStudentBySemester = catchAsync(async (req, res) => {
   });
 });
 
-
 const dashboradDepBasedStudent = catchAsync(async (req, res) => {
   const result = await StudentService.dashboradDepBasedStudent();
   sendResponse(res, {
@@ -125,6 +123,18 @@ const dashboradSemBasedStudent = catchAsync(async (req, res) => {
   });
 });
 
+const deleteStudent = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await StudentService.deleteStudent(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student deleted successfully',
+    data: result,
+  });
+});
 
 export const StudentController = {
   createStudent,
@@ -137,4 +147,5 @@ export const StudentController = {
   getMeAsStudentData,
   dashboradDepBasedStudent,
   dashboradSemBasedStudent,
+  deleteStudent,
 };
