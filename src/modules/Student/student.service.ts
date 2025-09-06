@@ -91,6 +91,13 @@ const getAllStudent = async () => {
   return result;
 };
 
+const getSingleStudent = async (id: string) => {
+  const result = await Student.findOne({ _id: id, isApproved: true }).populate(
+    'academicDepartment academicSemester',
+  );
+  return result;
+};
+
 const getNotApprovedStudent = async () => {
   const notApprovedStudents = await Student.find({
     isApproved: false,
@@ -237,10 +244,30 @@ const deleteStudent = async (id: string) => {
   }
 };
 
+const updateImformationByAdmin = async (
+  id: string,
+  payload: Partial<TStudent>,
+) => {
+  const student = await Student.findById({ _id: id });
+  if (!student) {
+    throw new AppError(400, 'Student Not FOund');
+  }
+
+  const result = await Student.findByIdAndUpdate(
+    {
+      _id: id,
+    },
+    { ...payload },
+    { new: true, runValidators: true },
+  );
+  return result;
+};
+
 export const StudentService = {
   createStudentIntoDB,
   makeApproval,
   getAllStudent,
+  getSingleStudent,
   getNotApprovedStudent,
   getApprovedStudent,
   getMeAsStudentData,
@@ -249,4 +276,5 @@ export const StudentService = {
   dashboradDepBasedStudent,
   dashboradSemBasedStudent,
   deleteStudent,
+  updateImformationByAdmin,
 };

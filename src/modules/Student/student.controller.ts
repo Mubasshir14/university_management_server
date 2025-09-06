@@ -46,6 +46,19 @@ const getAllStudent = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleStudent = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await StudentService.getSingleStudent(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student fetched successfully',
+    data: result,
+  });
+});
+
 const getNotApprovedStudent = catchAsync(async (req, res) => {
   const result = await StudentService.getNotApprovedStudent();
 
@@ -136,10 +149,23 @@ const deleteStudent = catchAsync(async (req, res) => {
   });
 });
 
+const updateImformationByAdmin = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await StudentService.updateImformationByAdmin(id, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student Updated successfully',
+    data: result,
+  });
+});
+
 export const StudentController = {
   createStudent,
   makeApproval,
   getAllStudent,
+  getSingleStudent,
   getStudentByDepartment,
   getStudentBySemester,
   getNotApprovedStudent,
@@ -148,4 +174,5 @@ export const StudentController = {
   dashboradDepBasedStudent,
   dashboradSemBasedStudent,
   deleteStudent,
+  updateImformationByAdmin,
 };

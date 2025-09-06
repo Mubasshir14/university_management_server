@@ -22,10 +22,12 @@ router.patch(
   StudentController.makeApproval,
 );
 
+router.get('/', auth(UserRole.ADMIN), StudentController.getAllStudent);
+
 router.get(
-  '/',
+  '/single-student/:id',
   auth(UserRole.ADMIN),
-  StudentController.getAllStudent,
+  StudentController.getSingleStudent,
 );
 
 router.get(
@@ -39,7 +41,6 @@ router.get(
   auth(UserRole.ADMIN),
   StudentController.dashboradSemBasedStudent,
 );
-
 
 router.get(
   '/not-approved-student',
@@ -75,6 +76,12 @@ router.delete(
   '/delete-student/:id',
   auth(UserRole.ADMIN),
   StudentController.deleteStudent,
+);
+
+router.patch(
+  '/update-student/:id',
+  auth(UserRole.ADMIN),
+  StudentController.updateImformationByAdmin,
 );
 
 export const StudentRoutes = router;
