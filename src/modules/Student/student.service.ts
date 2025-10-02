@@ -4,7 +4,6 @@ import AppError from '../../app/errors/AppError';
 import { AcademicDepartment } from '../AcademicDepartment/academicDepartment.model';
 import { TStudent } from './student.interface';
 import mongoose from 'mongoose';
-import { generateStudentId } from './generateStudentId';
 import { AcademicSemester } from '../AcademicSemester/academicSemester.model';
 import { Student } from './student.model';
 import User from '../User/user.model';
@@ -44,8 +43,8 @@ const createStudentIntoDB = async (
   try {
     session.startTransaction();
 
-    const generatedId = await generateStudentId();
-    payload.id = generatedId;
+    // const generatedId = await generateStudentId();
+    payload.id = user.student_id;
     payload.user = user.userId;
 
     if (image) {

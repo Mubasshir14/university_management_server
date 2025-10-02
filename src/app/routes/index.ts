@@ -8,6 +8,7 @@ import { CourseRoutes } from '../../modules/Course/course.route';
 import { StudentRoutes } from '../../modules/Student/student.route';
 import { RegistrationRoutes } from '../../modules/Registration/registrstion.route';
 import { ResultRoutes } from '../../modules/Result/result.routes';
+import { StudentIDRoutes } from '../../modules/StudentID/studentid.route';
 
 const router = Router();
 
@@ -47,6 +48,10 @@ const moduleRoutes = [
   {
     path: '/result',
     route: ResultRoutes,
+  },
+  {
+    path: '/studentId',
+    route: StudentIDRoutes,
   },
 ];
 

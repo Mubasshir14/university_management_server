@@ -14,7 +14,9 @@ export interface IUser extends Document {
   image?: string;
   name: string;
   role: UserRole;
+  student_id: string;
   phone: string;
+  nid: string;
   address: string;
   isStudent: boolean;
   lastLogin: Date;

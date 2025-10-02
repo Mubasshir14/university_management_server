@@ -55,6 +55,10 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, 'Academic Semester is required'],
       ref: 'AcademicSemester',
     },
+    year: {
+      type: String,
+      required: true,
+    },
     isApproved: {
       type: Boolean,
       default: false,

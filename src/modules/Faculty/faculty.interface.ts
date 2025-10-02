@@ -13,6 +13,7 @@ export type TBloodGroup =
 
 export type TFaculty = {
   id: string;
+  nid: string;
   designation: string;
   image?: string;
   name: string;

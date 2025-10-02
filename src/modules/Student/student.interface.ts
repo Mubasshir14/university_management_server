@@ -26,6 +26,7 @@ export type TStudent = {
   user?: Types.ObjectId;
   academicDepartment: Types.ObjectId;
   academicSemester: Types.ObjectId;
+  year: string;
 };
 
 export interface StudentModel extends Model<TStudent> {

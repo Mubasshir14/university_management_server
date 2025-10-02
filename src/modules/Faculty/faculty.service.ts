@@ -4,60 +4,14 @@ import mongoose from 'mongoose';
 import { TFaculty } from './faculty.interface';
 import { Faculty } from './faculty.model';
 import AppError from '../../app/errors/AppError';
-import { generateFacultyId } from './generateFacultyId';
 import { AcademicDepartment } from '../AcademicDepartment/academicDepartment.model';
-
-// const createFacultyIntoDB = async (
-//   payload: TFaculty,
-//   image: any,
-// ): Promise<TFaculty> => {
-//   const academicDepartment = await AcademicDepartment.findById(
-//     payload.academicDepartment,
-//   );
-//   if (!academicDepartment) {
-//     throw new AppError(httpStatus.BAD_REQUEST, 'Academic department not found');
-//   }
-
-//   const existingEmail = await Faculty.findOne({ email: payload.email });
-//   if (existingEmail) {
-//     throw new AppError(
-//       httpStatus.CONFLICT,
-//       'Faculty with this email already exists',
-//     );
-//   }
-
-//   const session = await mongoose.startSession();
-//   try {
-//     session.startTransaction();
-//     const generatedId = await generateFacultyId();
-//     payload.id = generatedId;
-
-//     if (image) {
-//       payload.image = image.path;
-//     }
-    
-//     const newFaculty = await Faculty.create([payload], { session });
-//     if (!newFaculty.length) {
-//       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create faculty');
-//     }
-
-//     await session.commitTransaction();
-//     return newFaculty[0];
-//   } catch (error) {
-//     await session.abortTransaction();
-//     throw error;
-//   } finally {
-//     session.endSession();
-//   }
-// };
-
 
 const createFacultyIntoDB = async (
   payload: TFaculty,
   image: any,
 ): Promise<TFaculty> => {
   const academicDepartment = await AcademicDepartment.findById(
-    payload.academicDepartment
+    payload.academicDepartment,
   );
 
   if (!academicDepartment) {
@@ -68,7 +22,28 @@ const createFacultyIntoDB = async (
   if (existingEmail) {
     throw new AppError(
       httpStatus.CONFLICT,
-      'Faculty with this email already exists'
+      'Faculty with this email already exists',
+    );
+  }
+  const existingNID = await Faculty.findOne({ nid: payload.nid });
+  if (existingNID) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      'Faculty with this nid already exists',
+    );
+  }
+  const existingFacultyID = await Faculty.findOne({ id: payload.id });
+  if (existingFacultyID) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      'Faculty with this id already exists',
+    );
+  }
+  const existingPhone = await Faculty.findOne({ contactNo: payload.contactNo });
+  if (existingPhone) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      'Faculty with this phone already exists',
     );
   }
 
@@ -77,27 +52,25 @@ const createFacultyIntoDB = async (
   try {
     session.startTransaction();
 
-    const generatedId = await generateFacultyId();
-    payload.id = generatedId;
+    // const generatedId = await generateFacultyId();
+    // payload.id = generatedId;
 
     if (image) {
       payload.image = image.path;
     }
 
-    // Create faculty
     const newFaculty = await Faculty.create([payload], { session });
 
     if (!newFaculty.length) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create faculty');
     }
 
-    // Push faculty _id into the corresponding AcademicDepartment
     await AcademicDepartment.findByIdAndUpdate(
       payload.academicDepartment,
       {
         $push: { faculty: newFaculty[0]._id },
       },
-      { session }
+      { session },
     );
 
     await session.commitTransaction();
@@ -110,16 +83,13 @@ const createFacultyIntoDB = async (
   }
 };
 
-
 const getAllFacultiesFromDB = async () => {
   const result = await Faculty.find().populate('academicDepartment');
   return result;
 };
 
 const getSingleFacultyFromDB = async (id: string) => {
-  const result = await Faculty.findById(id).populate(
-    'academicDepartment',
-  );
+  const result = await Faculty.findById(id).populate('academicDepartment');
 
   return result;
 };

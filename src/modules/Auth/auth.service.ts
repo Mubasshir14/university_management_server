@@ -33,6 +33,8 @@ const loginUser = async (payload: IAuth) => {
       userId: user._id as string,
       name: user.name as string,
       email: user.email as string,
+      phone: user.phone as string,
+      student_id: user.phone as string,
       isActive: user.isActive,
       role: user.role,
     };
@@ -101,6 +103,8 @@ const refreshToken = async (token: string) => {
      userId: isUserExist._id as string,
      name: isUserExist.name as string,
      email: isUserExist.email as string,
+     phone: isUserExist.phone as string,
+     student_id: isUserExist.phone as string,
      isActive: isUserExist.isActive,
      role: isUserExist.role,
   };

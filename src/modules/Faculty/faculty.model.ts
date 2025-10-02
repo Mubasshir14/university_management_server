@@ -9,6 +9,11 @@ const facultySchema = new Schema<TFaculty, FacultyModel>(
       required: [true, 'ID is required'],
       unique: true,
     },
+    nid: {
+      type: String,
+      required: [true, 'ID is required'],
+      unique: true,
+    },
     designation: {
       type: String,
       required: [true, 'Designation is required'],

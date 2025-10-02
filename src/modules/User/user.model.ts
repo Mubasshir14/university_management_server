@@ -13,7 +13,7 @@ const userSchema = new Schema<IUser, UserModel>(
       required: true,
     },
     image: {
-      type: String
+      type: String,
     },
     email: {
       type: String,
@@ -32,6 +32,17 @@ const userSchema = new Schema<IUser, UserModel>(
     },
     phone: {
       type: String,
+      unique: true,
+      required: true,
+    },
+    student_id: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    nid: {
+      type: String,
+      unique: true,
       required: true,
     },
     isStudent: {
