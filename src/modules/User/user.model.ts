@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
 import mongoose, { Schema } from 'mongoose';
 import { IUser, UserModel, UserRole } from './user.interface';
 import bcrypt from 'bcrypt';
@@ -85,10 +84,21 @@ const userSchema = new Schema<IUser, UserModel>(
   },
 );
 
+// userSchema.pre('save', async function (next) {
+//   const user = this;
+//   user.password = await bcrypt.hash(
+//     user.password,
+//     Number(config.bcrypt_salt_rounds),
+//   );
+
+//   next();
+// });
+
 userSchema.pre('save', async function (next) {
-  const user = this;
-  user.password = await bcrypt.hash(
-    user.password,
+  if (!this.isModified('password')) return next();
+
+  this.password = await bcrypt.hash(
+    this.password,
     Number(config.bcrypt_salt_rounds),
   );
 
@@ -100,12 +110,12 @@ userSchema.post('save', function (doc, next) {
   next();
 });
 
-// userSchema.set('toJSON', {
-//   transform: (_doc, ret) => {
-//     delete ret.password;
-//     return ret;
-//   },
-// });
+userSchema.set('toJSON', {
+  transform: (_doc, ret) => {
+    delete (ret as { password?: string }).password;
+    return ret;
+  },
+});
 
 userSchema.set('toJSON', {
   transform: (_doc, ret) => {

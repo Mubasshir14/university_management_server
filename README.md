@@ -112,13 +112,17 @@ Make sure you have the following installed:
     JWT_ACCESS_EXPIRES_IN=10d
     JWT_REFRESH_EXPIRES_IN=365d
 
-    # Password Reset
-    RESET_PASSWORD_UI_LINK=http://localhost:5000
+    # Email Verification
+    CLIENT_URL=http://localhost:3000
 
     # Cloudinary (Media Upload)
     CLOUDINARY_CLOUD_NAME=your-cloud-name
     CLOUDINARY_API_KEY=your-api-key
     CLOUDINARY_API_SECRET=your-api-secret
+
+    # For Nodemailer
+    FROM_EMAIL= SENDER_EMAIL
+    FROM_PASS= PASSWORD
 
    ```
 
