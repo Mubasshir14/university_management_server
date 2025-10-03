@@ -67,6 +67,12 @@ router.post(
 );
 
 router.post(
+  '/get-student-according-to-session',
+  auth(UserRole.ADMIN),
+  StudentController.getStudentBySession,
+);
+
+router.post(
   '/get-student-according-to-semester',
   auth(UserRole.ADMIN),
   StudentController.getStudentBySemester,

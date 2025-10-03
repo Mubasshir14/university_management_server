@@ -131,10 +131,17 @@ const getStudentByDepartment = async (id: string) => {
   return students;
 };
 
-const getStudentBySemester = async (id: string) => {
+const getStudentBySession = async (id: string) => {
   const students = await Student.find({
     academicSemester: id,
     isApproved: true,
+  }).populate('academicDepartment academicSemester');
+  return students;
+};
+
+const getStudentBySemester = async (id: string) => {
+  const students = await Student.find({
+    year: id,
   }).populate('academicDepartment academicSemester');
 
   return students;
@@ -271,6 +278,7 @@ export const StudentService = {
   getApprovedStudent,
   getMeAsStudentData,
   getStudentByDepartment,
+  getStudentBySession,
   getStudentBySemester,
   dashboradDepBasedStudent,
   dashboradSemBasedStudent,

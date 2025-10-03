@@ -105,6 +105,17 @@ const getStudentByDepartment = catchAsync(async (req, res) => {
   });
 });
 
+const getStudentBySession = catchAsync(async (req, res) => {
+  const { id } = req.body;
+  const result = await StudentService.getStudentBySession(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student fetched accordint to semester succesfully',
+    data: result,
+  });
+});
+
 const getStudentBySemester = catchAsync(async (req, res) => {
   const { id } = req.body;
   const result = await StudentService.getStudentBySemester(id);
@@ -167,6 +178,7 @@ export const StudentController = {
   getAllStudent,
   getSingleStudent,
   getStudentByDepartment,
+  getStudentBySession,
   getStudentBySemester,
   getNotApprovedStudent,
   getApprovedStudent,

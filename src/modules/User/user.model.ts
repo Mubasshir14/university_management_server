@@ -54,6 +54,19 @@ const userSchema = new Schema<IUser, UserModel>(
       type: String,
       required: true,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      default: null,
+    },
+    verificationTokenExpires: {
+      type: Date,
+      default: null,
+    },
+
     lastLogin: {
       type: Date,
       default: Date.now,

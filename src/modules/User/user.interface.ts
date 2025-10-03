@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
-import { Document, Model } from 'mongoose';
+import { Date, Document, Model } from 'mongoose';
 
 export enum UserRole {
   ADMIN = 'admin',
   STUDENT = 'student',
   ADVISOR = 'advisor',
-  USER = 'user'
+  USER = 'user',
 }
 
 export interface IUser extends Document {
@@ -21,6 +21,9 @@ export interface IUser extends Document {
   isStudent: boolean;
   lastLogin: Date;
   isActive: boolean;
+  isVerified: boolean;
+  verificationToken?: string | null;
+  verificationTokenExpires?: Date | null;
   otpToken?: string | null;
   createdAt: Date;
   updatedAt: Date;

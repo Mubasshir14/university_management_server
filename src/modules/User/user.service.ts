@@ -2,8 +2,10 @@ import { IUser, UserRole } from './user.interface';
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../app/errors/AppError';
 import User from './user.model';
-import { AuthService } from '../Auth/auth.service';
 import { StudentID } from '../StudentID/studentid.model';
+import crypto from 'crypto';
+import config from '../../app/config';
+import { sendUserVerificationEmail } from '../../app/utils/sendUserVerificationEmail';
 
 const registerUser = async (userData: IUser) => {
   if (userData.role === UserRole.ADMIN) {
@@ -48,13 +50,23 @@ const registerUser = async (userData: IUser) => {
     );
   }
 
-  const user = new User(userData);
+  const verificationToken = crypto.randomBytes(32).toString('hex');
+  const verificationTokenExpires = new Date(Date.now() + 1000 * 60 * 60);
+
+  const user = new User({
+    ...userData,
+    isVerified: false,
+    verificationToken,
+    verificationTokenExpires,
+  });
   await user.save();
 
-  return await AuthService.loginUser({
-    email: user.email,
-    password: userData.password,
-  });
+  const verificationUrl = `${config.CLIENT_URL}/verify-email?token=${verificationToken}`;
+  await sendUserVerificationEmail(user.email, verificationUrl);
+
+  return {
+    message: 'Registration pending. Please check your email to verify.',
+  };
 };
 
 export const UserServices = {
