@@ -7,7 +7,7 @@ const createStudent = catchAsync(async (req, res) => {
   const studentData = req.body;
   const image = req.file;
   const user = req.user;
-
+console.log('Student dat controller', studentData);
   const result = await StudentService.createStudentIntoDB(
     studentData,
     image,
