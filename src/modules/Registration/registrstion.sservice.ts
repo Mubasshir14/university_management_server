@@ -4,9 +4,10 @@ import httpStatus from 'http-status';
 import { Student } from '../Student/student.model';
 import AppError from '../../app/errors/AppError';
 import { AcademicDepartment } from '../AcademicDepartment/academicDepartment.model';
-import { AcademicSemester } from '../AcademicSemester/academicSemester.model';
 import { Course } from '../Course/course.model';
 import { Registration } from './registration.model';
+import { AcademicSession } from '../AcademicSession/academicSession.model';
+import { sendCourseRegistrationApprovalEmail } from '../../app/utils/sendCourseRegistrationApprovalEmail';
 
 const createRegistration = async (payload: any) => {
   const student = await Student.findById(payload.student);
@@ -21,10 +22,10 @@ const createRegistration = async (payload: any) => {
     throw new AppError(httpStatus.BAD_REQUEST, 'Academic department not found');
   }
 
-  const academicSemester = await AcademicSemester.findById(
-    payload.academicSemester,
+  const academicSession = await AcademicSession.findById(
+    payload.academicSession,
   );
-  if (!academicSemester) {
+  if (!academicSession) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Academic semester not found');
   }
 
@@ -64,7 +65,7 @@ const createRegistration = async (payload: any) => {
     const existingRegistration = await Registration.findOne({
       student: payload.student,
       academicDepartment: payload.academicDepartment,
-      academicSemester: payload.academicSemester,
+      academicSession: payload.academicSession,
       courses: { $all: payload.courses, $size: payload.courses.length },
     });
 
@@ -111,16 +112,16 @@ const createRegistration = async (payload: any) => {
 
 const getMyRegistrationInformation = async (id: string) => {
   const result = await Registration.findOne({ student: id }).populate(
-    'student courses academicDepartment academicSemester',
+    'student courses academicDepartment academicSession',
   );
   return result;
 };
 
 const getSingleRegistration = async (id: string) => {
   const result = await Registration.findOne({ _id: id }).populate(
-    'courses student academicDepartment academicSemester',
+    'courses student academicDepartment academicSession',
   );
-  // academicDepartment academicSemester student
+  // academicDepartment academicSession student
   return result;
 };
 
@@ -128,7 +129,7 @@ const getStudentByCourse = async (id: string) => {
   const result = await Registration.find({
     courses: { $in: [id] },
     // isApproved: true,
-  }).populate('student courses academicDepartment academicSemester');
+  }).populate('student courses academicDepartment academicSession');
 
   return result;
 };
@@ -136,19 +137,25 @@ const getStudentByCourse = async (id: string) => {
 const getNotApprovedRegisteredStudent = async () => {
   const notApprovedStudents = await Registration.find({
     isApproved: false,
-  }).populate('student courses academicDepartment academicSemester');
+  }).populate('student courses academicDepartment academicSession');
   return notApprovedStudents;
 };
 
 const getApprovedRegisteredStudent = async () => {
   const notApprovedStudents = await Registration.find({
     isApproved: true,
-  }).populate('student courses academicDepartment academicSemester');
+  }).populate('student courses academicDepartment academicSession');
   return notApprovedStudents;
 };
 
+
 const makeRegistrationApproval = async (id: string) => {
-  const registration = await Registration.findById(id);
+  const registration = await Registration.findById(id)
+    .populate('student', 'name email id year')
+    .populate('courses', 'name credits')
+    .populate('academicDepartment', 'name')
+    .populate('academicSession', 'name year');
+
   if (!registration) {
     throw new AppError(httpStatus.NOT_FOUND, 'Registration not found');
   }
@@ -157,6 +164,47 @@ const makeRegistrationApproval = async (id: string) => {
     id,
     { isApproved: true },
     { new: true },
+  )
+    .populate('student', 'name email id year')
+    .populate('courses', 'name credits')
+    .populate('academicDepartment', 'name')
+    .populate('academicSession', 'name year');
+
+  if (!result) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'Failed to approve course registration',
+    );
+  }
+
+  const student = (result.student as any) || {};
+  const courses = (result.courses as any[]) || [];
+  const academicDepartment = (result.academicDepartment as any) || {};
+  const academicSession = (result.academicSession as any) || {};
+
+  const studentName = student.name || 'Unknown';
+  const studentId = student.id || 'N/A';
+  const semesterYear = student.year || 'N/A';
+  const studentEmail = student.email || '';
+
+  const departmentName = academicDepartment.name || 'Unknown Department';
+  const sessionName = academicSession.name || 'Unknown Session';
+  const sessionYear = academicSession.year || 'N/A';
+
+  const courseDetails = courses.map((course) => ({
+    name: course.name,
+    credits: course.credits,
+  }));
+
+  await sendCourseRegistrationApprovalEmail(
+    studentEmail,
+    studentName,
+    studentId,
+    courseDetails,
+    departmentName,
+    sessionName,
+    sessionYear,
+    semesterYear,
   );
 
   return result;
@@ -164,7 +212,7 @@ const makeRegistrationApproval = async (id: string) => {
 
 const updateAndDropCourseByStudent = async (
   studentId: string,
-  academicSemesterId: string,
+  academicSessionId: string,
   academicDepartmentId: string,
   courseIdsToDrop: string[],
 ) => {
@@ -179,7 +227,7 @@ const updateAndDropCourseByStudent = async (
 
     const registration = await Registration.findOne({
       student: studentId,
-      academicSemester: academicSemesterId,
+      academicSession: academicSessionId,
       academicDepartment: academicDepartmentId,
       isApproved: false,
     }).session(session);
@@ -257,7 +305,7 @@ const updateAndDropCourseByStudent = async (
 
 const updateAndDropCourseByAdmin = async (
   studentId: string,
-  academicSemesterId: string,
+  academicSessionId: string,
   academicDepartmentId: string,
   courseIdsToDrop: string[],
 ) => {
@@ -271,8 +319,8 @@ const updateAndDropCourseByAdmin = async (
     );
 
     const registration = await Registration.findOne({
-       student: studentId,
-      academicSemester: academicSemesterId,
+      student: studentId,
+      academicSession: academicSessionId,
       academicDepartment: academicDepartmentId,
       isApproved: false,
     }).session(session);

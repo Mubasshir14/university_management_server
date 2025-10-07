@@ -1,10 +1,11 @@
 import httpStatus from 'http-status';
-import { AcademicSemesterServices } from './academicSemester.service';
+import { AcademicSessionServices } from './academicSession.service';
 import catchAsync from '../../app/utils/catchAsync';
 import sendResponse from '../../app/utils/sendResponse';
 
-const createAcademicSemester = catchAsync(async (req, res) => {
-  const result = await AcademicSemesterServices.createAcademicSemesterIntoDB(
+const createAcademicSession = catchAsync(async (req, res) => {
+  console.log('Hit');
+  const result = await AcademicSessionServices.createAcademicSessionIntoDB(
     req.body,
   );
 
@@ -16,8 +17,8 @@ const createAcademicSemester = catchAsync(async (req, res) => {
   });
 });
 
-const getAllAcademicSemesters = catchAsync(async (req, res) => {
-  const result = await AcademicSemesterServices.getAllAcademicSemestersFromDB();
+const getAllAcademicSessions = catchAsync(async (req, res) => {
+  const result = await AcademicSessionServices.getAllAcademicSessionsFromDB();
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -27,11 +28,11 @@ const getAllAcademicSemesters = catchAsync(async (req, res) => {
   });
 });
 
-const getSingleAcademicSemester = catchAsync(async (req, res) => {
+const getSingleAcademicSession = catchAsync(async (req, res) => {
   const { semesterId } = req.params;
 
   const result =
-    await AcademicSemesterServices.getSingleAcademicSemesterFromDB(semesterId);
+    await AcademicSessionServices.getSingleAcademicSessionFromDB(semesterId);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -41,9 +42,9 @@ const getSingleAcademicSemester = catchAsync(async (req, res) => {
   });
 });
 
-const updateAcademicSemester = catchAsync(async (req, res) => {
+const updateAcademicSession = catchAsync(async (req, res) => {
   const { semesterId } = req.params;
-  const result = await AcademicSemesterServices.updateAcademicSemesterIntoDB(
+  const result = await AcademicSessionServices.updateAcademicSessionIntoDB(
     semesterId,
     req.body,
   );
@@ -56,9 +57,9 @@ const updateAcademicSemester = catchAsync(async (req, res) => {
   });
 });
 
-export const AcademicSemesterControllers = {
-  createAcademicSemester,
-  getAllAcademicSemesters,
-  getSingleAcademicSemester,
-  updateAcademicSemester,
+export const AcademicSessionControllers = {
+  createAcademicSession,
+  getAllAcademicSessions,
+  getSingleAcademicSession,
+  updateAcademicSession,
 };

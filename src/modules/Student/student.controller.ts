@@ -7,7 +7,7 @@ const createStudent = catchAsync(async (req, res) => {
   const studentData = req.body;
   const image = req.file;
   const user = req.user;
-console.log('Student dat controller', studentData);
+  console.log('Student dat controller', studentData);
   const result = await StudentService.createStudentIntoDB(
     studentData,
     image,
@@ -24,7 +24,7 @@ console.log('Student dat controller', studentData);
 
 const makeApproval = catchAsync(async (req, res) => {
   const { id } = req.params;
-
+  console.log('PATCH /make-approval/:id called with id:', req.params.id);
   const result = await StudentService.makeApproval(id);
 
   sendResponse(res, {
@@ -137,12 +137,12 @@ const dashboradDepBasedStudent = catchAsync(async (req, res) => {
   });
 });
 
-const dashboradSemBasedStudent = catchAsync(async (req, res) => {
-  const result = await StudentService.dashboradSemBasedStudent();
+const dashboradSessionBasedStudent = catchAsync(async (req, res) => {
+  const result = await StudentService.dashboradSessionBasedStudent();
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Student fetched accordint to dashboard sem succesfully',
+    message: 'Student fetched accordint to dashboard session succesfully',
     data: result,
   });
 });
@@ -184,7 +184,7 @@ export const StudentController = {
   getApprovedStudent,
   getMeAsStudentData,
   dashboradDepBasedStudent,
-  dashboradSemBasedStudent,
+  dashboradSessionBasedStudent,
   deleteStudent,
   updateImformationByAdmin,
 };

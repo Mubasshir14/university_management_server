@@ -203,7 +203,8 @@ university_management_server/
  ┃ ┃ ┣ 📜cloudinary.config.ts
  ┃ ┃ ┣ 📜multer.config.ts
  ┃ ┃ ┣ 📜sendEmails.ts
- ┃ ┃ ┗ 📜sendResponse.ts
+ ┃ ┃ ┣ 📜sendResponse.ts
+ ┃ ┃ ┗ 📜sendUserVerificationEmail.ts
  ┣ 📂modules
  ┃ ┣ 📂AcademicDepartment
  ┃ ┃ ┣ 📜academicDepartment.controller.ts
@@ -213,14 +214,14 @@ university_management_server/
  ┃ ┃ ┣ 📜academicDepartment.service.ts
  ┃ ┃ ┣ 📜academicDepartment.validation.ts
  ┃ ┃ ┗ 📜academicDepartmets.constant.ts
- ┃ ┣ 📂AcademicSemester
- ┃ ┃ ┣ 📜academicSemester.constant.ts
- ┃ ┃ ┣ 📜academicSemester.controller.ts
- ┃ ┃ ┣ 📜academicSemester.interface.ts
- ┃ ┃ ┣ 📜academicSemester.model.ts
- ┃ ┃ ┣ 📜academicSemester.route.ts
- ┃ ┃ ┣ 📜academicSemester.service.ts
- ┃ ┃ ┗ 📜academicSemester.validation.ts
+ ┃ ┣ 📂AcademicSession
+ ┃ ┃ ┣ 📜academicSession.constant.ts
+ ┃ ┃ ┣ 📜academicSession.controller.ts
+ ┃ ┃ ┣ 📜academicSession.interface.ts
+ ┃ ┃ ┣ 📜academicSession.model.ts
+ ┃ ┃ ┣ 📜academicSession.route.ts
+ ┃ ┃ ┣ 📜academicSession.service.ts
+ ┃ ┃ ┗ 📜academicSession.validation.ts
  ┃ ┣ 📂Auth
  ┃ ┃ ┣ 📜auth.controller.ts
  ┃ ┃ ┣ 📜auth.interface.ts
@@ -251,6 +252,14 @@ university_management_server/
  ┃ ┃ ┣ 📜registration.model.ts
  ┃ ┃ ┣ 📜registrstion.route.ts
  ┃ ┃ ┗ 📜registrstion.sservice.ts
+ ┃ ┣ 📂Result
+ ┃ ┃ ┣ 📜result.constant.ts
+ ┃ ┃ ┣ 📜result.controller.ts
+ ┃ ┃ ┣ 📜result.iterface.ts
+ ┃ ┃ ┣ 📜result.model.ts
+ ┃ ┃ ┣ 📜result.routes.ts
+ ┃ ┃ ┣ 📜result.service.ts
+ ┃ ┃ ┗ 📜result.utils.ts
  ┃ ┣ 📂Student
  ┃ ┃ ┣ 📜generateStudentId.ts
  ┃ ┃ ┣ 📜student.constant.ts
@@ -260,6 +269,12 @@ university_management_server/
  ┃ ┃ ┣ 📜student.route.ts
  ┃ ┃ ┣ 📜student.service.ts
  ┃ ┃ ┗ 📜student.validation.ts
+ ┃ ┣ 📂StudentID
+ ┃ ┃ ┣ 📜studentid.controller.ts
+ ┃ ┃ ┣ 📜studentid.interface.ts
+ ┃ ┃ ┣ 📜studentid.model.ts
+ ┃ ┃ ┣ 📜studentid.route.ts
+ ┃ ┃ ┗ 📜studentid.service.ts
  ┃ ┗ 📂User
  ┃ ┃ ┣ 📜user.constant.ts
  ┃ ┃ ┣ 📜user.controller.ts

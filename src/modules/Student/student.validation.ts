@@ -25,7 +25,7 @@ const createStudentValidationSchema = z.object({
     .enum(BloodGroup, { required_error: 'Blood group is required' })
     .optional(),
   academicDepartment: z.string().min(1, 'Academic Department ID is required'),
-  academicSemester: z.string().min(1, 'Academic Semester ID is required'),
+  academicSession: z.string().min(1, 'Academic Session ID is required'),
 });
 
 export const studentValidations = {

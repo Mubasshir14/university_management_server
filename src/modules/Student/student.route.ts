@@ -37,9 +37,9 @@ router.get(
 );
 
 router.get(
-  '/sem',
+  '/session',
   auth(UserRole.ADMIN),
-  StudentController.dashboradSemBasedStudent,
+  StudentController.dashboradSessionBasedStudent,
 );
 
 router.get(

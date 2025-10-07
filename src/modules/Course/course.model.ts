@@ -34,7 +34,7 @@ const courseSchema = new Schema<TCourse>(
     offered_in: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'AcademicSemester',
+        ref: 'AcademicSession',
       },
     ],
   },

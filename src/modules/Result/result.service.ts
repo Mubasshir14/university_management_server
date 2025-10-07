@@ -86,7 +86,7 @@ const getMyResult = async (id: string) => {
     },
     {
       path: 'registration',
-      populate: [{ path: 'academicDepartment' }, { path: 'academicSemester' }],
+      populate: [{ path: 'academicDepartment' }, { path: 'academicSession' }],
     },
     {
       path: 'coursesMarks.courseId',
@@ -103,7 +103,7 @@ const getAllStudentResult = async () => {
     },
     {
       path: 'registration',
-      populate: [{ path: 'academicDepartment' }, { path: 'academicSemester' }],
+      populate: [{ path: 'academicDepartment' }, { path: 'academicSession' }],
     },
     {
       path: 'coursesMarks.courseId',

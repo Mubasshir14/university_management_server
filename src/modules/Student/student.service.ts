@@ -4,10 +4,12 @@ import AppError from '../../app/errors/AppError';
 import { AcademicDepartment } from '../AcademicDepartment/academicDepartment.model';
 import { TStudent } from './student.interface';
 import mongoose from 'mongoose';
-import { AcademicSemester } from '../AcademicSemester/academicSemester.model';
 import { Student } from './student.model';
 import User from '../User/user.model';
 import { Registration } from '../Registration/registration.model';
+import { AcademicSession } from '../AcademicSession/academicSession.model';
+import config from '../../app/config';
+import { sendStudentApprovalEmail } from '../../app/utils/sendStudentApprovalEmail';
 
 const createStudentIntoDB = async (
   payload: TStudent,
@@ -23,12 +25,12 @@ const createStudentIntoDB = async (
     throw new AppError(httpStatus.BAD_REQUEST, 'Academic department not found');
   }
 
-  const academicSemester = await AcademicSemester.findById(
-    payload.academicSemester,
+  const academicSession = await AcademicSession.findById(
+    payload.academicSession,
   );
 
-  if (!academicSemester) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Academic semester not found');
+  if (!academicSession) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Academic session not found');
   }
 
   const existingEmail = await Student.findOne({ email: payload.email });
@@ -85,14 +87,14 @@ const createStudentIntoDB = async (
 
 const getAllStudent = async () => {
   const result = await Student.find({}).populate(
-    'academicDepartment academicSemester',
+    'academicDepartment academicSession',
   );
   return result;
 };
 
 const getSingleStudent = async (id: string) => {
   const result = await Student.findOne({ _id: id, isApproved: true }).populate(
-    'academicDepartment academicSemester',
+    'academicDepartment academicSession',
   );
   return result;
 };
@@ -100,13 +102,13 @@ const getSingleStudent = async (id: string) => {
 const getNotApprovedStudent = async () => {
   const notApprovedStudents = await Student.find({
     isApproved: false,
-  }).populate('academicDepartment academicSemester');
+  }).populate('academicDepartment academicSession');
   return notApprovedStudents;
 };
 
 const getApprovedStudent = async () => {
   const notApprovedStudents = await Student.find({ isApproved: true }).populate(
-    'academicDepartment academicSemester',
+    'academicDepartment academicSession',
   );
   return notApprovedStudents;
 };
@@ -114,7 +116,7 @@ const getApprovedStudent = async () => {
 const getMeAsStudentData = async (user: any) => {
   const student = await Student.findOne({
     user: new mongoose.Types.ObjectId(user.userId),
-  }).populate('academicDepartment academicSemester');
+  }).populate('academicDepartment academicSession');
   if (!student) {
     throw new AppError(httpStatus.NOT_FOUND, 'Student not found');
   }
@@ -126,29 +128,32 @@ const getStudentByDepartment = async (id: string) => {
   const students = await Student.find({
     academicDepartment: id,
     isApproved: true,
-  }).populate('academicDepartment academicSemester');
+  }).populate('academicDepartment academicSession');
 
   return students;
 };
 
 const getStudentBySession = async (id: string) => {
   const students = await Student.find({
-    academicSemester: id,
+    academicSession: id,
     isApproved: true,
-  }).populate('academicDepartment academicSemester');
+  }).populate('academicDepartment academicSession');
   return students;
 };
 
 const getStudentBySemester = async (id: string) => {
   const students = await Student.find({
     year: id,
-  }).populate('academicDepartment academicSemester');
+  }).populate('academicDepartment academicSession');
 
   return students;
 };
 
 const makeApproval = async (id: string) => {
-  const student = await Student.findById(id);
+  const student = await Student.findById(id)
+    .populate('academicDepartment', 'name')
+    .populate('academicSession', 'name year');
+
   if (!student) {
     throw new AppError(httpStatus.NOT_FOUND, 'Student not found');
   }
@@ -158,6 +163,31 @@ const makeApproval = async (id: string) => {
     { isApproved: true },
     { new: true },
   );
+
+  if (!result) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to approve student');
+  }
+
+  const { email, academicDepartment, academicSession, year } = student;
+  const departmentName =
+    (academicDepartment as any)?.name || 'Unknown Department';
+  const sessionName = (academicSession as any)?.name || 'Unknown Session';
+  const sessionYear = (academicSession as any)?.year || 'N/A';
+  const courseRegistrationLink = `${config.CLIENT_URL}/student/dashboard/registration`;
+
+  try {
+    console.log('Attempting to send email to:', email);
+    await sendStudentApprovalEmail(
+      email,
+      courseRegistrationLink,
+      departmentName,
+      sessionName,
+      sessionYear,
+      year,
+    );
+  } catch (emailError) {
+    console.error('Email sending failed, but approval completed:', emailError);
+  }
 
   return result;
 };
@@ -192,30 +222,30 @@ const dashboradDepBasedStudent = async () => {
   return result;
 };
 
-const dashboradSemBasedStudent = async () => {
+const dashboradSessionBasedStudent = async () => {
   const result = await Student.aggregate([
     {
       $group: {
-        _id: '$academicSemester',
+        _id: '$academicSession',
         totalStudents: { $sum: 1 },
       },
     },
     {
       $lookup: {
-        from: 'academicsemesters',
+        from: 'academicsessions',
         localField: '_id',
         foreignField: '_id',
-        as: 'semesterInfo',
+        as: 'sessionInfo',
       },
     },
-    { $unwind: '$semesterInfo' },
+    { $unwind: '$sessionInfo' },
     {
       $project: {
         _id: 0,
-        semesterId: '$_id',
-        semesterName: '$semesterInfo.name',
-        year: '$semesterInfo.year',
-        code: '$semesterInfo.code',
+        sessionId: '$_id',
+        sessionName: '$sessionInfo.name',
+        year: '$sessionInfo.year',
+        code: '$sessionInfo.code',
         totalStudents: 1,
       },
     },
@@ -281,7 +311,7 @@ export const StudentService = {
   getStudentBySession,
   getStudentBySemester,
   dashboradDepBasedStudent,
-  dashboradSemBasedStudent,
+  dashboradSessionBasedStudent,
   deleteStudent,
   updateImformationByAdmin,
 };

@@ -26,10 +26,10 @@ const registrationSchema = new Schema<TRegistration, RegistrationModel>(
       required: [true, 'Academic Department is required'],
       ref: 'AcademicDepartment',
     },
-    academicSemester: {
+    academicSession: {
       type: Schema.Types.ObjectId,
       required: [true, 'Academic Semester is required'],
-      ref: 'AcademicSemester',
+      ref: 'AcademicSession',
     },
     isApproved: {
       type: Boolean,

@@ -25,7 +25,7 @@ export type TStudent = {
   isRegistered?: boolean;
   user?: Types.ObjectId;
   academicDepartment: Types.ObjectId;
-  academicSemester: Types.ObjectId;
+  academicSession: Types.ObjectId;
   year: string;
 };
 

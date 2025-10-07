@@ -21,7 +21,7 @@ router.delete('/:id', auth(UserRole.ADMIN), CourseControllers.deleteCourse);
 router.get(
   '/student/:id',
   auth(UserRole.STUDENT),
-  CourseControllers.getAllCoursesAccordingToStudentAcademicSemester,
+  CourseControllers.getAllCoursesAccordingToStudentAcademicSession,
 );
 
 router.patch(

@@ -8,7 +8,7 @@ export type TRegistration = {
   totalCredit: number;
   courses: Types.ObjectId[];
   academicDepartment: Types.ObjectId;
-  academicSemester: Types.ObjectId;
+  academicSession: Types.ObjectId;
   isResultPublished: boolean;
 };
 

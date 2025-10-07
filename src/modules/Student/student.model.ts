@@ -50,10 +50,10 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, 'Academic Department is required'],
       ref: 'AcademicDepartment',
     },
-    academicSemester: {
+    academicSession: {
       type: Schema.Types.ObjectId,
-      required: [true, 'Academic Semester is required'],
-      ref: 'AcademicSemester',
+      required: [true, 'Academic Session is required'],
+      ref: 'AcademicSession',
     },
     year: {
       type: String,

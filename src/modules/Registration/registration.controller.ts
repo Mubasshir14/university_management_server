@@ -87,7 +87,7 @@ const makeRegistrationApproval = catchAsync(async (req, res) => {
 const updateAndDropCourseByStudent = catchAsync(async (req, res) => {
   const {
     studentId,
-    academicSemesterId,
+    academicSessionId,
     academicDepartmentId,
     courseIdsToDrop,
   } = req.body;
@@ -95,7 +95,7 @@ const updateAndDropCourseByStudent = catchAsync(async (req, res) => {
   const updatedRegistration =
     await RegistrationService.updateAndDropCourseByStudent(
       studentId,
-      academicSemesterId,
+      academicSessionId,
       academicDepartmentId,
       courseIdsToDrop,
     );
@@ -109,13 +109,13 @@ const updateAndDropCourseByStudent = catchAsync(async (req, res) => {
 });
 
 const updateAndDropCourseByAdmin = catchAsync(async (req, res) => {
-  const { studentId, academicSemesterId, academicDepartmentId, courseIdsToDrop } =
+  const { studentId, academicSessionId, academicDepartmentId, courseIdsToDrop } =
     req.body;
 
   const updatedRegistration =
     await RegistrationService.updateAndDropCourseByStudent(
       studentId,
-      academicSemesterId,
+      academicSessionId,
       academicDepartmentId,
       courseIdsToDrop,
     );

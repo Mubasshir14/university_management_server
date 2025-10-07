@@ -13,14 +13,14 @@ const getAllCoursesFromDB = async () => {
 
   return result;
 };
-const getAllCoursesAccordingToStudentAcademicSemester = async (id: string) => {
+const getAllCoursesAccordingToStudentAcademicSession = async (id: string) => {
   const student = await Student.findById(id);
   if (!student) {
     throw new AppError(500, 'Student is not found');
   }
 
   const result = await Course.find({
-    offered_in: student.academicSemester,
+    offered_in: student.academicSession,
   })
     .populate('faculty')
     .populate('offered_in');
@@ -59,7 +59,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
 export const CourseServices = {
   createCourseIntoDB,
   getAllCoursesFromDB,
-  getAllCoursesAccordingToStudentAcademicSemester,
+  getAllCoursesAccordingToStudentAcademicSession,
   getSingleCourseFromDB,
   deleteCourseFromDB,
   updateCourseIntoDB,
