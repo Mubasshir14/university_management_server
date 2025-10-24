@@ -12,7 +12,6 @@ router.post(
   auth(UserRole.USER),
   multerUpload.single('image'),
   parseBody,
-  //   validateRequest(studentValidations.createStudentValidationSchema),
   StudentController.createStudent,
 );
 
@@ -20,6 +19,12 @@ router.patch(
   '/make-approval/:id',
   auth(UserRole.ADMIN),
   StudentController.makeApproval,
+);
+
+router.patch(
+  '/make-approval-many',
+  auth(UserRole.ADMIN),
+  StudentController.makeManyApproval,
 );
 
 router.get('/', auth(UserRole.ADMIN), StudentController.getAllStudent);

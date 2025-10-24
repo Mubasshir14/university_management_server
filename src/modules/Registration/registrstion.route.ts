@@ -29,6 +29,12 @@ router.patch(
   RegistrationController.makeRegistrationApproval,
 );
 
+router.patch(
+  '/make-approval-many',
+  auth(UserRole.ADMIN),
+  RegistrationController.makeManyRegistrationApproval,
+);
+
 router.get(
   '/not-approved-registration',
   auth(UserRole.ADMIN),

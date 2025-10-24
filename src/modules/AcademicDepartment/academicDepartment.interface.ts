@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 
-export type TAcademicDepartment = {
+export interface TAcademicDepartment  {
   name: string;
   image?: string;
   shortName: string;

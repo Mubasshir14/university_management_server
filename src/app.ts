@@ -6,11 +6,15 @@ const app: Application = express();
 
 // parsers
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  }),
+);
 
 // application route
-app.use('/api', router)
-
+app.use('/api', router);
 
 const getAController = (req: Request, res: Response) => {
   res.status(200).json({

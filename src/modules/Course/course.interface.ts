@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 
-export type TCourse = {
+export interface TCourse {
   name: string;
   shortName: string;
   courseCode: string;

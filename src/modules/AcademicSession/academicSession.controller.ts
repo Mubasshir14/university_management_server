@@ -4,7 +4,6 @@ import catchAsync from '../../app/utils/catchAsync';
 import sendResponse from '../../app/utils/sendResponse';
 
 const createAcademicSession = catchAsync(async (req, res) => {
-  console.log('Hit');
   const result = await AcademicSessionServices.createAcademicSessionIntoDB(
     req.body,
   );

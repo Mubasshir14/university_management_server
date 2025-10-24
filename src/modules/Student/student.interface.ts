@@ -11,7 +11,7 @@ export type TBloodGroup =
   | 'O+'
   | 'O-';
 
-export type TStudent = {
+export interface TStudent  {
   id: string;
   image?: string;
   firstName: string;

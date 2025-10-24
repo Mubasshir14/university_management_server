@@ -176,7 +176,6 @@ const makeApproval = async (id: string) => {
   const courseRegistrationLink = `${config.CLIENT_URL}/student/dashboard/registration`;
 
   try {
-    console.log('Attempting to send email to:', email);
     await sendStudentApprovalEmail(
       email,
       courseRegistrationLink,
@@ -187,6 +186,7 @@ const makeApproval = async (id: string) => {
     );
   } catch (emailError) {
     console.error('Email sending failed, but approval completed:', emailError);
+    throw emailError
   }
 
   return result;
@@ -299,9 +299,73 @@ const updateImformationByAdmin = async (
   return result;
 };
 
+
+const makeManyApproval = async (ids: string[]) => {
+  const approvedStudents: any[] = [];
+  const failedStudents: any[] = [];
+
+  for (const id of ids) {
+    try {
+      const student = await Student.findById(id)
+        .populate('academicDepartment', 'name')
+        .populate('academicSession', 'name year');
+
+      if (!student) {
+        console.warn(`Student with ID ${id} not found`);
+        failedStudents.push({ id, reason: 'Student not found' });
+        continue;
+      }
+
+      const result = await Student.findByIdAndUpdate(
+        id,
+        { isApproved: true },
+        { new: true }
+      );
+
+      if (!result) {
+        console.warn(`Failed to update student ID ${id}`);
+        failedStudents.push({ id, reason: 'Failed to update' });
+        continue;
+      }
+
+      const { email, academicDepartment, academicSession, year } = student;
+      const departmentName = (academicDepartment as any)?.name || 'Unknown Department';
+      const sessionName = (academicSession as any)?.name || 'Unknown Session';
+      const sessionYear = (academicSession as any)?.year || 'N/A';
+      const courseRegistrationLink = `${config.CLIENT_URL}/student/dashboard/registration`;
+
+      try {
+        await sendStudentApprovalEmail(
+          email,
+          courseRegistrationLink,
+          departmentName,
+          sessionName,
+          sessionYear,
+          year
+        );
+        approvedStudents.push(result);
+      } catch (emailError) {
+        console.error(`Email sending failed for student ID ${id}:`, emailError);
+        failedStudents.push({ id, reason: 'Email sending failed' });
+      }
+    } catch (error) {
+      console.error(`Error approving student ID ${id}:`, error);
+    }
+  }
+
+  return {
+    message: 'Batch approval completed',
+    approvedCount: approvedStudents.length,
+    failedCount: failedStudents.length,
+    approvedStudents,
+    failedStudents,
+  };
+};
+
 export const StudentService = {
   createStudentIntoDB,
   makeApproval,
+  makeManyApproval,
   getAllStudent,
   getSingleStudent,
   getNotApprovedStudent,

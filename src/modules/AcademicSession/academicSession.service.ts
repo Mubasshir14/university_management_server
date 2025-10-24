@@ -11,8 +11,7 @@ const createAcademicSessionIntoDB = async (payload: TAcademicSession) => {
 };
 
 const getAllAcademicSessionsFromDB = async () => {
-  const result = AcademicSession.find();
-
+  const result = await AcademicSession.find();
   return result;
 };
 

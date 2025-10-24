@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 
 export type TGrade = 'A' | 'B' | 'C' | 'D' | 'F' | 'NA';
 
-export type TCourseMarks = {
+export interface TCourseMarks  {
   courseId: Types.ObjectId;
   midTerm1: number;
   midTerm2: number;
@@ -10,7 +10,7 @@ export type TCourseMarks = {
   total?: number;
 };
 
-export type TStudentResult = {
+export interface TStudentResult  {
   registration: Types.ObjectId;
   student: Types.ObjectId;
   coursesMarks: TCourseMarks[];

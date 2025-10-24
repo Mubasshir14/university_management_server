@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Model, Types } from 'mongoose';
 
-export type TRegistration = {
+export interface TRegistration {
   student: Types.ObjectId;
   student_id: string;
   isApproved?: boolean;

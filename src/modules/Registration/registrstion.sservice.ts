@@ -121,7 +121,6 @@ const getSingleRegistration = async (id: string) => {
   const result = await Registration.findOne({ _id: id }).populate(
     'courses student academicDepartment academicSession',
   );
-  // academicDepartment academicSession student
   return result;
 };
 
@@ -147,7 +146,6 @@ const getApprovedRegisteredStudent = async () => {
   }).populate('student courses academicDepartment academicSession');
   return notApprovedStudents;
 };
-
 
 const makeRegistrationApproval = async (id: string) => {
   const registration = await Registration.findById(id)
@@ -396,6 +394,81 @@ const updateAndDropCourseByAdmin = async (
   }
 };
 
+export const makeManyRegistrationApproval = async (ids: string[]) => {
+  if (!ids || ids.length === 0) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'No registration IDs provided');
+  }
+
+  const results: any[] = [];
+
+  for (const id of ids) {
+    const registration = await Registration.findById(id)
+      .populate('student', 'name email id year')
+      .populate('courses', 'name credits')
+      .populate('academicDepartment', 'name')
+      .populate('academicSession', 'name year');
+
+    if (!registration) {
+      console.warn(`Registration not found: ${id}`);
+      continue;
+    }
+
+    const result = await Registration.findByIdAndUpdate(
+      id,
+      { isApproved: true },
+      { new: true },
+    )
+      .populate('student', 'name email id year')
+      .populate('courses', 'name credits')
+      .populate('academicDepartment', 'name')
+      .populate('academicSession', 'name year');
+
+    if (!result) {
+      continue;
+    }
+
+    const student = (result.student as any) || {};
+    const courses = (result.courses as any[]) || [];
+    const academicDepartment = (result.academicDepartment as any) || {};
+    const academicSession = (result.academicSession as any) || {};
+
+    const studentName = student.name || 'Unknown';
+    const studentId = student.id || 'N/A';
+    const semesterYear = student.year || 'N/A';
+    const studentEmail = student.email || '';
+
+    const departmentName = academicDepartment.name || 'Unknown Department';
+    const sessionName = academicSession.name || 'Unknown Session';
+    const sessionYear = academicSession.year || 'N/A';
+
+    const courseDetails = courses.map((course) => ({
+      name: course.name,
+      credits: course.credits,
+    }));
+
+    try {
+      await sendCourseRegistrationApprovalEmail(
+        studentEmail,
+        studentName,
+        studentId,
+        courseDetails,
+        departmentName,
+        sessionName,
+        sessionYear,
+        semesterYear,
+      );
+    } catch (err) {
+      console.error(
+        `Failed to send email for registration ${id}:`,
+        (err as Error).message,
+      );
+    }
+    results.push(result);
+  }
+
+  return results;
+};
+
 export const RegistrationService = {
   createRegistration,
   getMyRegistrationInformation,
@@ -403,6 +476,7 @@ export const RegistrationService = {
   getNotApprovedRegisteredStudent,
   getApprovedRegisteredStudent,
   makeRegistrationApproval,
+  makeManyRegistrationApproval,
   updateAndDropCourseByStudent,
   updateAndDropCourseByAdmin,
   getSingleRegistration,

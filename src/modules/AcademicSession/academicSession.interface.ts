@@ -15,7 +15,7 @@ export type TMonths =
 export type TAcademicSessionName = 'Autumn' | 'Summer' | 'Fall';
 export type TAcademicSessionCode = '01' | '02' | '03';
 
-export type TAcademicSession = {
+export interface TAcademicSession  {
   name: TAcademicSessionName;
   code: TAcademicSessionCode;
   year: string;

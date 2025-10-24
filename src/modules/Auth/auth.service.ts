@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import mongoose from 'mongoose';
-import { IAuth, IJwtPayload } from './auth.interface';
 import User from '../User/user.model';
 import bcrypt from 'bcrypt';
 import AppError from '../../app/errors/AppError';
@@ -9,6 +8,7 @@ import { StatusCodes } from 'http-status-codes';
 import config from '../../app/config';
 import { createToken, verifyToken } from './auth.utils';
 import { JwtPayload, Secret } from 'jsonwebtoken';
+import { IAuth, IJwtPayload } from './auth.interface';
 
 const loginUser = async (payload: IAuth) => {
   const session = await mongoose.startSession();
@@ -16,10 +16,19 @@ const loginUser = async (payload: IAuth) => {
   try {
     session.startTransaction();
 
-    const user = await User.findOne({ email: payload.email }).session(session);
+    const user = await User.findOne({ email: payload.email })
+      .select('+password')
+      .session(session);
     if (!user) {
       throw new AppError(StatusCodes.NOT_FOUND, 'This user is not found!');
     }
+    if (!payload?.email || !payload?.password) {
+      throw new AppError(
+        StatusCodes.BAD_REQUEST,
+        'Email and password are required',
+      );
+    }
+
     if (!user.isVerified) {
       throw new AppError(
         StatusCodes.FORBIDDEN,
@@ -55,12 +64,6 @@ const loginUser = async (payload: IAuth) => {
       jwtPayload,
       config.jwt_refresh_secret as string,
       config.jwt_refresh_expires_in as string,
-    );
-
-    const updateUserInfo = await User.findByIdAndUpdate(
-      user._id,
-      { clientInfo: payload.clientInfo, lastLogin: Date.now() },
-      { new: true, session },
     );
 
     await session.commitTransaction();

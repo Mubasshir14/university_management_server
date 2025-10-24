@@ -109,8 +109,12 @@ const updateAndDropCourseByStudent = catchAsync(async (req, res) => {
 });
 
 const updateAndDropCourseByAdmin = catchAsync(async (req, res) => {
-  const { studentId, academicSessionId, academicDepartmentId, courseIdsToDrop } =
-    req.body;
+  const {
+    studentId,
+    academicSessionId,
+    academicDepartmentId,
+    courseIdsToDrop,
+  } = req.body;
 
   const updatedRegistration =
     await RegistrationService.updateAndDropCourseByStudent(
@@ -127,6 +131,19 @@ const updateAndDropCourseByAdmin = catchAsync(async (req, res) => {
   });
 });
 
+const makeManyRegistrationApproval = catchAsync(async (req, res) => {
+  const { ids } = req.body;
+
+  const result = await RegistrationService.makeManyRegistrationApproval(ids);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Registration(s) approved successfully',
+    data: result,
+  });
+});
+
 export const RegistrationController = {
   createRegistration,
   getMyRegistrationInformation,
@@ -134,6 +151,7 @@ export const RegistrationController = {
   getApprovedRegisteredStudent,
   getNotApprovedRegisteredStudent,
   makeRegistrationApproval,
+  makeManyRegistrationApproval,
   updateAndDropCourseByStudent,
   updateAndDropCourseByAdmin,
   getSingleRegistration,

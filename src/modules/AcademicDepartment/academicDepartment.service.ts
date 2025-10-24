@@ -15,7 +15,6 @@ const createAcademicDepartmentIntoDB = async (
 
 const getAllAcademicDepartmentsFromDB = async () => {
   const result = await AcademicDepartment.find().populate('faculty');
-
   return result;
 };
 
@@ -24,20 +23,6 @@ const getSingleAcademicDepartmentFromDB = async (id: string) => {
 
   return result;
 };
-
-// const updateAcademicDepartmentIntoDB = async (
-//   id: string,
-//   payload: Partial<TAcademicDepartment>,
-// ) => {
-//   const result = await AcademicDepartment.findOneAndUpdate(
-//     { _id: id },
-//     payload,
-//     {
-//       new: true,
-//     },
-//   );
-//   return result;
-// };
 
 const updateAcademicDepartmentIntoDB = async (
   departmentId: string,

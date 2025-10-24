@@ -74,13 +74,11 @@ const updateCourse = catchAsync(async (req, res) => {
   });
 });
 
-
-
 export const CourseControllers = {
   createCourse,
   getSingleCourse,
   getAllCoursesAccordingToStudentAcademicSession,
   getAllCourses,
   deleteCourse,
-  updateCourse
+  updateCourse,
 };

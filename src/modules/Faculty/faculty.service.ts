@@ -25,6 +25,7 @@ const createFacultyIntoDB = async (
       'Faculty with this email already exists',
     );
   }
+
   const existingNID = await Faculty.findOne({ nid: payload.nid });
   if (existingNID) {
     throw new AppError(
@@ -32,6 +33,7 @@ const createFacultyIntoDB = async (
       'Faculty with this nid already exists',
     );
   }
+
   const existingFacultyID = await Faculty.findOne({ id: payload.id });
   if (existingFacultyID) {
     throw new AppError(
@@ -39,6 +41,7 @@ const createFacultyIntoDB = async (
       'Faculty with this id already exists',
     );
   }
+  
   const existingPhone = await Faculty.findOne({ contactNo: payload.contactNo });
   if (existingPhone) {
     throw new AppError(

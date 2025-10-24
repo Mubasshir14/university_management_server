@@ -7,7 +7,6 @@ const createStudent = catchAsync(async (req, res) => {
   const studentData = req.body;
   const image = req.file;
   const user = req.user;
-  console.log('Student dat controller', studentData);
   const result = await StudentService.createStudentIntoDB(
     studentData,
     image,
@@ -172,9 +171,21 @@ const updateImformationByAdmin = catchAsync(async (req, res) => {
   });
 });
 
+const makeManyApproval = catchAsync(async (req, res) => {
+  const { ids } = req.body;
+  const result = await StudentService.makeManyApproval(ids);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Students approved successfully',
+    data: result,
+  });
+});
+
 export const StudentController = {
   createStudent,
   makeApproval,
+  makeManyApproval,
   getAllStudent,
   getSingleStudent,
   getStudentByDepartment,
