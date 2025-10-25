@@ -16,7 +16,6 @@ const createStudentIntoDB = async (
   image: any,
   user: any,
 ): Promise<TStudent> => {
-  console.log(user);
   const academicDepartment = await AcademicDepartment.findById(
     payload.academicDepartment,
   );
@@ -55,7 +54,7 @@ const createStudentIntoDB = async (
 
     // Create student
     const newStudent = await Student.create([payload], { session });
-    // console.log(newStudent);
+    console.log(newStudent);
     if (!newStudent.length) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student');
     }

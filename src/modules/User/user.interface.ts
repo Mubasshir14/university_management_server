@@ -11,14 +11,12 @@ export enum UserRole {
 export interface IUser extends Document {
   email: string;
   password: string;
-  image?: string;
   name: string;
   role: UserRole;
   student_id: string;
   phone: string;
   nid: string;
   address: string;
-  isStudent: boolean;
   lastLogin: Date;
   isActive: boolean;
   isVerified: boolean;

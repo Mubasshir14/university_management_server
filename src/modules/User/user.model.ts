@@ -11,9 +11,6 @@ const userSchema = new Schema<IUser, UserModel>(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-    },
     email: {
       type: String,
       required: true,
@@ -45,11 +42,7 @@ const userSchema = new Schema<IUser, UserModel>(
       unique: true,
       required: true,
     },
-    isStudent: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
+
     address: {
       type: String,
       required: true,

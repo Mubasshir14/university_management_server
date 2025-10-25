@@ -54,7 +54,6 @@ const userValidationSchema = z.object({
     role: z
       .enum([UserRole.STUDENT, UserRole.ADVISOR, UserRole.ADMIN, UserRole.USER])
       .default(UserRole.USER),
-    isStudent: z.boolean().optional(),
   }),
 });
 
