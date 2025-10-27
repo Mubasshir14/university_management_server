@@ -23,7 +23,6 @@ const createStudent = catchAsync(async (req, res) => {
 
 const makeApproval = catchAsync(async (req, res) => {
   const { id } = req.params;
-  console.log('PATCH /make-approval/:id called with id:', req.params.id);
   const result = await StudentService.makeApproval(id);
 
   sendResponse(res, {

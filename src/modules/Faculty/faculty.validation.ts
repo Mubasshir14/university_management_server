@@ -42,7 +42,6 @@ const facultyIdSchema = z
   .string()
   .regex(/^F\d{6}$/, 'Faculty ID must start with "F" and followed by 6 digits');
 
-
 export const createFacultyValidationSchema = z.object({
   body: z.object({
     id: facultyIdSchema,

@@ -26,6 +26,7 @@ export interface TStudent  {
   user?: Types.ObjectId;
   academicDepartment: Types.ObjectId;
   academicSession: Types.ObjectId;
+  // academic semester
   year: string;
 };
 
