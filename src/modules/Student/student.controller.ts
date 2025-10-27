@@ -12,7 +12,6 @@ const createStudent = catchAsync(async (req, res) => {
     image,
     user,
   );
-  console.log(result);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
